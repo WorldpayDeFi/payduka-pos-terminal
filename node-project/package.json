@@ -1,0 +1,25 @@
+{
+  "name": "node-project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "deploy": "node deploy.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@nomicfoundation/hardhat-verify": "^3.0.16",
+    "@nomiclabs/hardhat-etherscan": "^3.1.8",
+    "dotenv": "^17.4.0",
+    "ethers": "^5.7.2"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^7.0.0",
+    "@nomiclabs/hardhat-ethers": "^2.2.3",
+    "@openzeppelin/contracts": "^5.6.1",
+    "hardhat": "^2.28.6"
+  }
+}

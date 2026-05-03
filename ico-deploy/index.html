@@ -1,0 +1,1208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>PayDuka — Retail Blockchain Ecosystem | Africa's DeFi Payment Revolution</title>
+
+<!-- ── SEO META TAGS ── -->
+<meta name="description" content="PayDuka is a blockchain-powered retail payment ecosystem built on Polygon. PDuka Token Seed ICO is LIVE — buy now at $0.005 per token. Empowering African merchants with instant crypto payments, staking rewards, and Play-to-Earn gaming."/>
+<meta name="keywords" content="PayDuka, PDuka token, blockchain payments Africa, DeFi retail, crypto PoS, Play-to-Earn Africa, Polygon payments, unbanked Africa, crypto merchant payments, ICO 2026"/>
+<meta name="author" content="PayDuka — X.G. Sikhosana"/>
+<meta name="robots" content="index, follow"/>
+<link rel="canonical" href="https://payduka.xyz/"/>
+
+<!-- ── OPEN GRAPH ── -->
+<meta property="og:type" content="website"/>
+<meta property="og:url" content="https://payduka.xyz/"/>
+<meta property="og:title" content="PayDuka — Africa's Retail Blockchain Ecosystem"/>
+<meta property="og:description" content="PDuka Token Seed ICO is LIVE at $0.005. Instant crypto payments for African merchants. Ultra-low fees, staking rewards, Play-to-Earn gaming. Powered by Polygon."/>
+<meta property="og:image" content="https://payduka.xyz/PayDuka_Logo_Final.png"/>
+
+<!-- ── TWITTER/X CARD ── -->
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:site" content="@PayDuka"/>
+<meta name="twitter:title" content="PayDuka — PDuka Token ICO is LIVE"/>
+<meta name="twitter:description" content="Buy PDuka tokens now at $0.005. Africa's retail blockchain ecosystem. Powered by Polygon."/>
+<meta name="twitter:image" content="https://payduka.xyz/PayDuka_Logo_Final.png"/>
+
+<!-- ── FAVICON ── -->
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 60'><polygon points='30,4 52,17 52,43 30,56 8,43 8,17' fill='%230D1F35' stroke='%2300BFA5' stroke-width='2'/><text x='10' y='40' font-family='Arial Black' font-size='22' font-weight='900' fill='%2300BFA5'>P</text><text x='26' y='40' font-family='Arial Black' font-size='22' font-weight='900' fill='%23F4A81D'>D</text></svg>"/>
+
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+
+<!-- ── ETHERS v6 (for ICO widget) ── -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.7.0/ethers.umd.min.js"></script>
+
+<style>
+  :root {
+    --navy:   #0A1628;
+    --navy2:  #0D1F35;
+    --navy3:  #112240;
+    --teal:   #00897B;
+    --teal2:  #00BFA5;
+    --teal3:  #64FFDA;
+    --gold:   #F4A81D;
+    --gold2:  #FFD54F;
+    --white:  #E8F0F8;
+    --muted:  #8899AA;
+    --card:   #0D1F35;
+    --border: rgba(0,191,165,0.15);
+    --red:    #FF5C5C;
+    --green:  #2ECC71;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--navy);
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    overflow-x: hidden;
+    cursor: default;
+  }
+
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 0; opacity: .4;
+  }
+
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--navy); }
+  ::-webkit-scrollbar-thumb { background: var(--teal); border-radius: 2px; }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 5%; height: 70px;
+    background: rgba(10,22,40,0.85);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .nav-logo-icon { width: 38px; height: 38px; position: relative; }
+  .nav-logo-icon svg { width: 100%; height: 100%; }
+  .nav-logo-text { font-family: 'Syne', sans-serif; font-size: 1.4rem; font-weight: 800; letter-spacing: -0.5px; }
+  .nav-logo-text span { color: var(--gold); }
+  .nav-links { display: flex; align-items: center; gap: 2rem; list-style: none; }
+  .nav-links a { color: var(--muted); text-decoration: none; font-family: 'Space Mono', monospace; font-size: .78rem; font-weight: 500; letter-spacing: .5px; transition: color .2s; }
+  .nav-links a:hover { color: var(--teal3); }
+  .nav-cta { background: transparent; border: 1.5px solid var(--teal2); color: var(--teal2) !important; padding: .45rem 1.2rem; border-radius: 4px; transition: all .2s !important; }
+  .nav-cta:hover { background: var(--teal2) !important; color: var(--navy) !important; }
+  .nav-buy { background: var(--gold) !important; border: none !important; color: var(--navy) !important; padding: .45rem 1.2rem; border-radius: 4px; font-weight: 700 !important; transition: all .2s !important; }
+  .nav-buy:hover { background: var(--gold2) !important; color: var(--navy) !important; transform: translateY(-1px); }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; padding: 100px 5% 60px; position: relative; overflow: hidden;
+  }
+  .hero-grid {
+    position: absolute; inset: 0;
+    background-image: linear-gradient(rgba(0,137,123,.06) 1px, transparent 1px), linear-gradient(90deg, rgba(0,137,123,.06) 1px, transparent 1px);
+    background-size: 60px 60px;
+    animation: gridMove 20s linear infinite;
+  }
+  @keyframes gridMove { 0% { transform: translateY(0); } 100% { transform: translateY(60px); } }
+  .hero-glow {
+    position: absolute; width: 700px; height: 700px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,137,123,.18) 0%, transparent 70%);
+    top: 50%; left: 50%; transform: translate(-50%,-50%); pointer-events: none;
+  }
+  .hero-content { position: relative; z-index: 2; max-width: 820px; }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(0,191,165,.08); border: 1px solid rgba(0,191,165,.3); color: var(--teal3);
+    font-family: 'Space Mono', monospace; font-size: .72rem; letter-spacing: 1.5px;
+    padding: .45rem 1rem; border-radius: 100px; margin-bottom: 2rem;
+    animation: fadeUp .8s ease both;
+  }
+  .hero-badge::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--teal3); animation: pulse 2s ease-in-out infinite; }
+  @keyframes pulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: .4; transform: scale(1.4); } }
+  .hero-title { font-family: 'Syne', sans-serif; font-size: clamp(3rem, 7vw, 5.5rem); font-weight: 800; line-height: 1.05; letter-spacing: -2px; margin-bottom: 1.5rem; animation: fadeUp .8s .15s ease both; }
+  .hero-title .gold { color: var(--gold); }
+  .hero-title .teal { color: var(--teal3); }
+  .hero-sub { font-size: 1.15rem; line-height: 1.7; color: var(--muted); max-width: 580px; margin: 0 auto 2.5rem; font-weight: 300; animation: fadeUp .8s .3s ease both; }
+  .hero-buttons { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-bottom: 4rem; animation: fadeUp .8s .45s ease both; }
+  .btn-primary { background: var(--gold); color: var(--navy); border: none; padding: .85rem 2rem; border-radius: 6px; font-family: 'Syne', sans-serif; font-size: .95rem; font-weight: 700; cursor: pointer; text-decoration: none; transition: all .2s; letter-spacing: .3px; display: inline-block; }
+  .btn-primary:hover { background: var(--gold2); transform: translateY(-2px); box-shadow: 0 8px 30px rgba(244,168,29,.35); }
+  .btn-outline { background: transparent; color: var(--teal2); border: 1.5px solid var(--teal2); padding: .85rem 2rem; border-radius: 6px; font-family: 'Syne', sans-serif; font-size: .95rem; font-weight: 700; cursor: pointer; text-decoration: none; transition: all .2s; display: inline-block; }
+  .btn-outline:hover { background: rgba(0,191,165,.1); transform: translateY(-2px); }
+
+  /* ── HERO ICO BOX (live version) ── */
+  .ico-box { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 2rem 2.5rem; max-width: 620px; margin: 0 auto; position: relative; overflow: hidden; animation: fadeUp .8s .6s ease both; }
+  .ico-box::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--teal), var(--gold), var(--teal2)); }
+  .ico-label { font-family: 'Space Mono', monospace; font-size: .7rem; letter-spacing: 2px; color: var(--gold); margin-bottom: .75rem; text-transform: uppercase; }
+  .ico-live-badge { display: inline-flex; align-items: center; gap: 7px; background: rgba(46,204,113,0.12); border: 1px solid rgba(46,204,113,0.3); border-radius: 100px; padding: 4px 12px; font-size: .72rem; font-family: 'Space Mono', monospace; color: var(--green); letter-spacing: 1px; margin-bottom: 1rem; }
+  .ico-live-badge .dot { width: 7px; height: 7px; background: var(--green); border-radius: 50%; animation: pulse 1.5s ease infinite; }
+  .ico-hero-title { font-family: 'Syne', sans-serif; font-size: 1.15rem; font-weight: 700; margin-bottom: 1.25rem; color: var(--white); }
+  .ico-mini-stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 1.25rem; }
+  .ico-mini-stat { background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: 10px; padding: 10px 8px; text-align: center; }
+  .ico-mini-val { font-family: 'DM Mono', monospace; font-size: clamp(12px,3vw,15px); font-weight: 500; color: var(--teal3); margin-bottom: 3px; }
+  .ico-mini-label { font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; font-family: 'Space Mono', monospace; }
+  .ico-progress-wrap { margin-bottom: 1.25rem; }
+  .ico-progress-header { display: flex; justify-content: space-between; font-size: 11px; color: var(--muted); margin-bottom: 6px; font-family: 'Space Mono', monospace; }
+  .ico-bar-bg { background: rgba(255,255,255,.07); border-radius: 100px; height: 7px; overflow: hidden; }
+  .ico-bar-fill { height: 100%; background: linear-gradient(90deg, var(--teal2), var(--gold)); border-radius: 100px; width: 0%; transition: width 1.2s cubic-bezier(0.4,0,0.2,1); box-shadow: 0 0 8px rgba(0,191,165,0.4); }
+  .ico-box-actions { display: flex; gap: .75rem; }
+  .btn-buy-now { flex: 1; padding: .8rem 1rem; border: none; border-radius: 8px; background: linear-gradient(135deg, var(--gold), #e8920f); color: var(--navy); font-family: 'Syne', sans-serif; font-size: .95rem; font-weight: 800; cursor: pointer; letter-spacing: .04em; text-decoration: none; text-align: center; transition: all .2s; box-shadow: 0 4px 18px rgba(244,168,29,.3); }
+  .btn-buy-now:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(244,168,29,.45); }
+  .btn-view-contract { padding: .8rem 1rem; border: 1px solid var(--border); border-radius: 8px; background: transparent; color: var(--muted); font-family: 'Space Mono', monospace; font-size: .72rem; cursor: pointer; text-decoration: none; text-align: center; transition: all .2s; white-space: nowrap; }
+  .btn-view-contract:hover { border-color: var(--teal2); color: var(--teal2); }
+
+  /* ── STATS STRIP ── */
+  .stats-strip { display: flex; justify-content: center; flex-wrap: wrap; gap: 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); background: rgba(13,31,53,.6); backdrop-filter: blur(10px); position: relative; z-index: 2; }
+  .stat-item { flex: 1; min-width: 160px; padding: 2rem 1.5rem; text-align: center; border-right: 1px solid var(--border); transition: background .2s; }
+  .stat-item:last-child { border-right: none; }
+  .stat-item:hover { background: rgba(0,137,123,.05); }
+  .stat-num { font-family: 'Syne', sans-serif; font-size: 2rem; font-weight: 800; color: var(--teal3); display: block; }
+  .stat-label { font-size: .8rem; color: var(--muted); letter-spacing: .5px; margin-top: .25rem; font-family: 'Space Mono', monospace; }
+
+  /* ── ICO BUY SECTION ── */
+  #ico {
+    background: var(--navy2);
+    padding: 100px 5%;
+    position: relative;
+    z-index: 1;
+  }
+  #ico::before {
+    content: '';
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+    width: 700px; height: 700px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(244,168,29,.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .ico-section-inner { max-width: 580px; margin: 0 auto; position: relative; z-index: 2; }
+  .ico-section-header { text-align: center; margin-bottom: 2.5rem; }
+
+  /* ── ICO WIDGET (buy card) ── */
+  .ico-widget { background: rgba(13,31,53,0.9); border: 1px solid rgba(0,191,165,.2); border-radius: 20px; padding: 28px 24px; backdrop-filter: blur(16px); margin-bottom: 16px; }
+  .ico-widget-stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 20px; }
+  .iws { background: rgba(255,255,255,.04); border: 1px solid var(--border); border-radius: 12px; padding: 12px 8px; text-align: center; }
+  .iws-val { font-family: 'DM Mono', monospace; font-size: clamp(12px,3.5vw,16px); font-weight: 500; color: var(--teal3); margin-bottom: 3px; }
+  .iws-label { font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: .07em; font-family: 'Space Mono', monospace; }
+  .ico-progress-section { background: rgba(255,255,255,.03); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; margin-bottom: 18px; }
+  .ico-p-header { display: flex; justify-content: space-between; font-size: 11px; color: var(--muted); margin-bottom: 8px; font-family: 'Space Mono', monospace; }
+  .ico-p-header strong { color: var(--white); }
+  .ico-p-bg { background: rgba(255,255,255,.06); border-radius: 100px; height: 7px; overflow: hidden; }
+  .ico-p-fill { height: 100%; background: linear-gradient(90deg, var(--teal2), var(--gold)); border-radius: 100px; width: 0%; transition: width 1.2s cubic-bezier(0.4,0,0.2,1); box-shadow: 0 0 8px rgba(0,191,165,.4); }
+  .ico-card-title { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: 16px; }
+  .ico-tabs { display: grid; grid-template-columns: 1fr 1fr; background: rgba(255,255,255,.05); border-radius: 10px; padding: 4px; margin-bottom: 18px; gap: 4px; }
+  .ico-tab { padding: 9px; border-radius: 7px; border: none; background: transparent; color: var(--muted); font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; cursor: pointer; transition: all .2s; letter-spacing: .04em; }
+  .ico-tab.active { background: linear-gradient(135deg, var(--teal2), #00897B); color: var(--white); box-shadow: 0 4px 14px rgba(0,191,165,.25); }
+  .ico-input-group { margin-bottom: 14px; }
+  .ico-input-label { font-size: 11px; color: var(--muted); margin-bottom: 6px; display: block; letter-spacing: .04em; font-family: 'Space Mono', monospace; }
+  .ico-input-row { display: flex; align-items: center; background: rgba(255,255,255,.05); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; transition: border-color .2s; }
+  .ico-input-row:focus-within { border-color: var(--teal2); box-shadow: 0 0 0 3px rgba(0,191,165,.1); }
+  .ico-input-row input { flex: 1; background: transparent; border: none; outline: none; padding: 12px 14px; color: var(--white); font-family: 'DM Mono', monospace; font-size: 16px; }
+  .ico-input-row input::placeholder { color: rgba(255,255,255,.2); }
+  .ico-input-tag { padding: 0 14px; font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 500; color: var(--teal3); background: rgba(0,191,165,.08); height: 100%; display: flex; align-items: center; border-left: 1px solid var(--border); white-space: nowrap; }
+  .ico-receive-box { background: rgba(0,191,165,.05); border: 1px dashed rgba(0,191,165,.2); border-radius: 10px; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
+  .ico-recv-label { font-size: 11px; color: var(--muted); font-family: 'Space Mono', monospace; }
+  .ico-recv-amount { font-family: 'DM Mono', monospace; font-size: 17px; font-weight: 500; color: var(--teal3); }
+  .ico-recv-sub { font-size: 10px; color: var(--muted); margin-top: 2px; text-align: right; }
+  .btn-ico-buy { width: 100%; padding: 15px; border: none; border-radius: 12px; background: linear-gradient(135deg, var(--gold), #e8920f); color: var(--navy); font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; cursor: pointer; transition: all .2s; box-shadow: 0 5px 20px rgba(244,168,29,.3); position: relative; overflow: hidden; }
+  .btn-ico-buy::after { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg,rgba(255,255,255,.15),transparent); opacity: 0; transition: opacity .2s; }
+  .btn-ico-buy:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(244,168,29,.45); }
+  .btn-ico-buy:hover::after { opacity: 1; }
+  .btn-ico-buy:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+  .btn-ico-connect { width: 100%; padding: 15px; border: 1px solid var(--teal2); border-radius: 12px; background: rgba(0,191,165,.07); color: var(--teal3); font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; cursor: pointer; transition: all .2s; display: flex; align-items: center; justify-content: center; gap: 10px; }
+  .btn-ico-connect:hover { background: rgba(0,191,165,.14); box-shadow: 0 0 20px rgba(0,191,165,.2); }
+  .ico-wallet-status { display: flex; align-items: center; gap: 8px; background: rgba(46,204,113,.07); border: 1px solid rgba(46,204,113,.2); border-radius: 8px; padding: 9px 14px; font-family: 'DM Mono', monospace; font-size: 11px; color: var(--green); margin-bottom: 16px; }
+  .ico-wallet-status .wdot { width: 7px; height: 7px; background: var(--green); border-radius: 50%; animation: pulse 2s ease infinite; }
+  .ico-info-row { display: flex; justify-content: space-between; font-size: 11px; padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,.05); }
+  .ico-info-row:last-child { border-bottom: none; }
+  .ico-info-row .ik { color: var(--muted); font-family: 'Space Mono', monospace; }
+  .ico-info-row .iv { color: var(--white); font-family: 'DM Mono', monospace; font-size: 11px; }
+  .ico-info-row .iv.green { color: var(--green); }
+  .ico-info-row .iv.gold { color: var(--gold2); }
+
+  /* ── CONTRACT CARD ── */
+  .ico-contract-card { background: rgba(13,31,53,0.9); border: 1px solid var(--border); border-radius: 14px; padding: 18px 20px; backdrop-filter: blur(12px); }
+  .ico-contract-addr { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--teal3); word-break: break-all; cursor: pointer; }
+  .ico-contract-addr:hover { color: var(--gold2); }
+
+  /* ── TOAST ── */
+  .ico-toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px); background: var(--navy2); border: 1px solid var(--border); border-radius: 12px; padding: 14px 20px; font-size: 13px; max-width: 320px; width: 90%; text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,.4); transition: transform .3s ease; z-index: 9999; font-family: 'DM Sans', sans-serif; }
+  .ico-toast.show { transform: translateX(-50%) translateY(0); }
+  .ico-toast.success { border-color: rgba(46,204,113,.4); color: var(--green); }
+  .ico-toast.error { border-color: rgba(255,92,92,.4); color: var(--red); }
+  .ico-toast.info { border-color: rgba(0,191,165,.4); color: var(--teal3); }
+  .ico-spinner { width: 18px; height: 18px; border: 2px solid rgba(11,20,55,.4); border-top-color: var(--navy); border-radius: 50%; animation: spin .7s linear infinite; display: inline-block; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* SECTIONS SHARED */
+  section { padding: 100px 5%; position: relative; z-index: 1; }
+  .section-tag { font-family: 'Space Mono', monospace; font-size: .72rem; letter-spacing: 3px; color: var(--teal2); text-transform: uppercase; margin-bottom: .75rem; }
+  .section-title { font-family: 'Syne', sans-serif; font-size: clamp(2rem, 4vw, 3rem); font-weight: 800; letter-spacing: -1px; line-height: 1.1; margin-bottom: 1.25rem; }
+  .section-title span { color: var(--gold); }
+  .section-sub { color: var(--muted); font-size: 1rem; line-height: 1.7; max-width: 560px; font-weight: 300; }
+  .section-header { margin-bottom: 4rem; }
+
+  /* ABOUT */
+  #about { background: var(--navy2); }
+  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; max-width: 1100px; margin: 0 auto; }
+  .about-visual { position: relative; display: flex; align-items: center; justify-content: center; }
+  .hex-visual { width: 300px; height: 300px; position: relative; }
+  .hex-visual svg { width: 100%; height: 100%; }
+  .about-pillars { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .pillar-card { background: var(--navy3); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem; transition: all .3s; position: relative; overflow: hidden; }
+  .pillar-card::before { content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 100%; background: var(--teal2); transform: scaleY(0); transform-origin: bottom; transition: transform .3s; }
+  .pillar-card:hover::before { transform: scaleY(1); }
+  .pillar-card:hover { border-color: rgba(0,191,165,.4); transform: translateY(-3px); }
+  .pillar-icon { font-size: 1.5rem; margin-bottom: .5rem; }
+  .pillar-title { font-family: 'Syne', sans-serif; font-size: .95rem; font-weight: 700; margin-bottom: .35rem; color: var(--white); }
+  .pillar-desc { font-size: .8rem; color: var(--muted); line-height: 1.5; }
+
+  /* HOW IT WORKS */
+  #how-it-works { background: var(--navy); }
+  .pd-step { display: flex; gap: 20px; align-items: flex-start; margin-bottom: 10px; opacity: 0; transform: translateX(-20px); transition: opacity .5s ease, transform .5s ease; }
+  .pd-step-icon { width: 56px; height: 56px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; position: relative; z-index: 2; }
+  .pd-step-body { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px 24px; flex: 1; transition: border-color .3s, box-shadow .3s; }
+  .pd-step-body:hover { border-color: rgba(0,191,165,.3); box-shadow: 0 6px 24px rgba(0,137,123,.1); }
+  .pd-step-num { font-family: 'Space Mono', monospace; font-size: .65rem; letter-spacing: 2px; color: var(--muted); margin-bottom: 5px; }
+  .pd-step-title { font-family: 'Syne', sans-serif; font-size: 1.05rem; font-weight: 700; color: var(--white); margin-bottom: 7px; }
+  .pd-step-desc { font-size: .875rem; color: var(--muted); line-height: 1.7; }
+  .pd-badge { display: inline-flex; align-items: gap: 6px; margin-top: 10px; padding: 4px 12px; border-radius: 100px; font-size: .7rem; font-weight: 600; }
+  .pd-badge-teal { background: rgba(0,137,123,.12); color: var(--teal2); border: 1px solid rgba(0,191,165,.25); }
+  .pd-badge-gold { background: rgba(244,168,29,.1); color: var(--gold); border: 1px solid rgba(244,168,29,.25); }
+  .pd-badge-teal3 { background: rgba(100,255,218,.08); color: var(--teal3); border: 1px solid rgba(100,255,218,.2); }
+  .pd-arrow { padding-left: 75px; margin-bottom: 10px; color: var(--muted); font-size: 16px; opacity: .35; }
+
+  /* TOKENOMICS */
+  #tokenomics { background: var(--navy); }
+  .token-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 4rem; align-items: start; max-width: 1100px; margin: 0 auto; }
+  .token-info-box { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; }
+  .token-supply { font-family: 'Space Mono', monospace; font-size: .72rem; color: var(--muted); letter-spacing: 1px; margin-bottom: .5rem; }
+  .token-supply-num { font-family: 'Syne', sans-serif; font-size: 1.8rem; font-weight: 800; color: var(--gold); }
+  .token-supply-label { font-size: .85rem; color: var(--muted); margin-top: .25rem; }
+  .token-badges { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1.25rem; }
+  .token-badge { background: rgba(0,137,123,.1); border: 1px solid rgba(0,191,165,.25); color: var(--teal2); font-family: 'Space Mono', monospace; font-size: .68rem; padding: .35rem .8rem; border-radius: 100px; letter-spacing: .5px; }
+  .alloc-list { display: flex; flex-direction: column; gap: .85rem; }
+  .alloc-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: .4rem; }
+  .alloc-name { font-size: .9rem; font-weight: 500; }
+  .alloc-pct { font-family: 'Space Mono', monospace; font-size: .85rem; color: var(--gold); font-weight: 700; }
+  .alloc-bar { height: 6px; background: rgba(255,255,255,.07); border-radius: 3px; overflow: hidden; }
+  .alloc-fill { height: 100%; border-radius: 3px; animation: barFill 1.5s ease both; }
+  @keyframes barFill { from { width: 0; } }
+  .alloc-sub { font-size: .75rem; color: var(--muted); margin-top: .3rem; }
+
+  /* ROADMAP */
+  #roadmap { background: var(--navy2); }
+  .roadmap-track { max-width: 900px; margin: 0 auto; position: relative; }
+  .roadmap-track::before { content: ''; position: absolute; left: 28px; top: 0; bottom: 0; width: 2px; background: linear-gradient(to bottom, var(--teal), var(--gold), transparent); }
+  .roadmap-item { display: flex; gap: 2rem; margin-bottom: 3rem; position: relative; }
+  .roadmap-dot { width: 58px; height: 58px; border-radius: 50%; background: var(--navy3); border: 2px solid var(--teal); display: flex; align-items: center; justify-content: center; flex-shrink: 0; position: relative; z-index: 1; font-size: 1.2rem; transition: all .3s; }
+  .roadmap-item:hover .roadmap-dot { background: var(--teal); box-shadow: 0 0 20px rgba(0,137,123,.5); }
+  .roadmap-item.active .roadmap-dot { border-color: var(--gold); background: rgba(244,168,29,.1); box-shadow: 0 0 25px rgba(244,168,29,.3); }
+  .roadmap-content { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; flex: 1; transition: all .3s; }
+  .roadmap-item:hover .roadmap-content { border-color: rgba(0,191,165,.35); transform: translateX(4px); }
+  .roadmap-q { font-family: 'Space Mono', monospace; font-size: .72rem; color: var(--gold); letter-spacing: 2px; margin-bottom: .5rem; }
+  .roadmap-phase { font-family: 'Syne', sans-serif; font-size: 1.1rem; font-weight: 700; margin-bottom: .75rem; }
+  .roadmap-items { list-style: none; }
+  .roadmap-items li { font-size: .875rem; color: var(--muted); padding: .3rem 0; padding-left: 1rem; position: relative; line-height: 1.5; }
+  .roadmap-items li::before { content: '›'; position: absolute; left: 0; color: var(--teal2); }
+  .roadmap-items li.done { color: var(--teal2); }
+  .roadmap-items li.done::before { content: '✓'; color: var(--green); }
+
+  /* TEAM */
+  #team { background: var(--navy); }
+  .team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; max-width: 1100px; margin: 0 auto; }
+  .team-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 2rem 1.5rem; text-align: center; transition: all .3s; position: relative; overflow: hidden; }
+  .team-card::after { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(0,137,123,.06), transparent); opacity: 0; transition: opacity .3s; }
+  .team-card:hover { transform: translateY(-6px); border-color: rgba(0,191,165,.35); }
+  .team-card:hover::after { opacity: 1; }
+  .team-avatar { width: 72px; height: 72px; border-radius: 50%; background: var(--navy3); border: 2px solid var(--teal); display: flex; align-items: center; justify-content: center; font-size: 1.8rem; margin: 0 auto 1rem; }
+  .team-name { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; margin-bottom: .25rem; }
+  .team-role { font-family: 'Space Mono', monospace; font-size: .7rem; color: var(--teal2); letter-spacing: 1px; margin-bottom: .75rem; text-transform: uppercase; }
+  .team-bio { font-size: .82rem; color: var(--muted); line-height: 1.6; }
+
+  /* WHITEPAPER */
+  #whitepaper { background: var(--navy2); text-align: center; }
+  .wp-card { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 4rem 3rem; max-width: 700px; margin: 0 auto; position: relative; overflow: hidden; }
+  .wp-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--teal), var(--gold), var(--teal2)); }
+  .wp-icon { font-size: 3.5rem; margin-bottom: 1.5rem; display: block; }
+  .wp-title { font-family: 'Syne', sans-serif; font-size: 1.6rem; font-weight: 800; margin-bottom: 1rem; }
+  .wp-desc { color: var(--muted); line-height: 1.7; margin-bottom: 2rem; font-weight: 300; }
+  .wp-meta { display: flex; justify-content: center; gap: 2rem; margin-bottom: 2rem; flex-wrap: wrap; }
+  .wp-meta-item { display: flex; flex-direction: column; align-items: center; gap: .25rem; }
+  .wp-meta-val { font-family: 'Space Mono', monospace; font-size: .85rem; color: var(--teal3); font-weight: 700; }
+  .wp-meta-key { font-size: .72rem; color: var(--muted); letter-spacing: .5px; }
+
+  /* COLLABORATE */
+  #collaborate { background: var(--navy); }
+  .collab-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; max-width: 1000px; margin: 0 auto; }
+  .collab-types { display: flex; flex-direction: column; gap: 1rem; margin-top: 2rem; }
+  .collab-type { display: flex; gap: 1rem; align-items: flex-start; padding: 1rem 1.25rem; background: var(--card); border: 1px solid var(--border); border-radius: 10px; transition: all .2s; }
+  .collab-type:hover { border-color: rgba(0,191,165,.35); transform: translateX(4px); }
+  .collab-type-icon { font-size: 1.4rem; flex-shrink: 0; margin-top: 2px; }
+  .collab-type-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: .95rem; margin-bottom: .2rem; }
+  .collab-type-desc { font-size: .82rem; color: var(--muted); line-height: 1.5; }
+  .collab-form { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 2.5rem; position: relative; overflow: hidden; }
+  .collab-form::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--gold), var(--teal)); }
+  .form-title { font-family: 'Syne', sans-serif; font-size: 1.2rem; font-weight: 700; margin-bottom: 1.5rem; }
+  .form-group { margin-bottom: 1rem; }
+  .form-group label { display: block; font-size: .78rem; color: var(--muted); letter-spacing: .5px; margin-bottom: .4rem; font-family: 'Space Mono', monospace; }
+  .form-group input, .form-group select, .form-group textarea { width: 100%; background: var(--navy3); border: 1px solid var(--border); color: var(--white); padding: .75rem 1rem; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: .9rem; transition: border-color .2s; outline: none; }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--teal2); box-shadow: 0 0 0 3px rgba(0,191,165,.1); }
+  .form-group textarea { resize: vertical; min-height: 90px; }
+  .form-group select option { background: var(--navy2); }
+
+  /* FOOTER */
+  footer { background: var(--navy2); border-top: 1px solid var(--border); padding: 3rem 5%; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.5rem; }
+  .footer-logo { font-family: 'Syne', sans-serif; font-size: 1.3rem; font-weight: 800; }
+  .footer-logo span { color: var(--gold); }
+  .footer-links { display: flex; gap: 1.5rem; list-style: none; flex-wrap: wrap; }
+  .footer-links a { color: var(--muted); text-decoration: none; font-size: .82rem; font-family: 'Space Mono', monospace; transition: color .2s; }
+  .footer-links a:hover { color: var(--teal3); }
+  .footer-copy { font-size: .78rem; color: var(--muted); font-family: 'Space Mono', monospace; }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+  .reveal { opacity: 0; transform: translateY(20px); transition: opacity .7s ease, transform .7s ease; }
+  .reveal.visible { opacity: 1; transform: none; }
+
+  /* HAMBURGER */
+  .nav-hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 6px; background: none; border: none; z-index: 200; }
+  .nav-hamburger span { display: block; width: 24px; height: 2px; background: var(--teal2); border-radius: 2px; transition: all .3s; }
+  .nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+  .nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+  .mobile-menu { display: none; position: fixed; top: 70px; left: 0; right: 0; background: rgba(10,22,40,0.98); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); padding: 1.5rem 5%; z-index: 99; flex-direction: column; gap: 0; }
+  .mobile-menu.open { display: flex; }
+  .mobile-menu a { color: var(--muted); text-decoration: none; font-family: 'Space Mono', monospace; font-size: .85rem; padding: 1rem 0; border-bottom: 1px solid var(--border); transition: color .2s; letter-spacing: .5px; }
+  .mobile-menu a:last-child { border-bottom: none; }
+  .mobile-menu a:hover { color: var(--teal3); }
+  .mobile-menu .mob-cta { margin-top: .75rem; color: var(--teal2) !important; border: 1.5px solid var(--teal2); border-radius: 6px; padding: .75rem 1rem !important; text-align: center; }
+  .mobile-menu .mob-buy { margin-top: .5rem; color: var(--navy) !important; background: var(--gold); border-radius: 6px; padding: .75rem 1rem !important; text-align: center; font-weight: 700; }
+
+  /* RESPONSIVE */
+  @media (min-width: 1400px) { .about-grid, .token-grid, .collab-grid { max-width: 1300px; } .team-grid { max-width: 1300px; } section { padding: 120px 8%; } }
+  @media (max-width: 1199px) { .about-grid { gap: 3rem; } .token-grid { gap: 2.5rem; } .collab-grid { gap: 2.5rem; } .hex-visual { width: 240px; height: 240px; } }
+  @media (max-width: 1023px) {
+    nav { padding: 0 4%; } .nav-links { gap: 1.2rem; } .nav-links a { font-size: .72rem; } section { padding: 80px 4%; }
+    .about-grid { grid-template-columns: 1fr; gap: 2.5rem; max-width: 680px; margin: 0 auto; } .about-visual { display: none; } .about-pillars { grid-template-columns: 1fr 1fr; }
+    .token-grid { grid-template-columns: 1fr; gap: 2rem; max-width: 680px; margin: 0 auto; }
+    .collab-grid { grid-template-columns: 1fr; gap: 2.5rem; max-width: 680px; margin: 0 auto; }
+    .team-grid { grid-template-columns: repeat(2, 1fr); } .roadmap-track { max-width: 680px; } .wp-card { padding: 3rem 2rem; }
+    .stats-strip { justify-content: flex-start; } .stat-item { min-width: 140px; padding: 1.5rem 1rem; } .stat-num { font-size: 1.6rem; }
+  }
+  @media (max-width: 767px) {
+    nav { padding: 0 4%; } .nav-links { display: none; } .nav-hamburger { display: flex; }
+    section { padding: 70px 4%; } #hero { padding: 90px 4% 50px; }
+    .hero-title { font-size: clamp(2.2rem, 9vw, 3.5rem); letter-spacing: -1px; } .hero-sub { font-size: 1rem; }
+    .hero-buttons { flex-direction: column; align-items: center; } .hero-buttons a { width: 100%; max-width: 320px; text-align: center; }
+    .hero-glow { width: 400px; height: 400px; }
+    .ico-box { padding: 1.5rem; } .ico-box-actions { flex-direction: column; }
+    .ico-mini-stats { gap: 6px; }
+    .stats-strip { flex-wrap: wrap; } .stat-item { flex: 0 0 50%; border-right: none; border-bottom: 1px solid var(--border); padding: 1.25rem 1rem; } .stat-item:nth-child(odd) { border-right: 1px solid var(--border); } .stat-item:last-child { flex: 0 0 100%; border-bottom: none; } .stat-num { font-size: 1.6rem; }
+    .about-grid { grid-template-columns: 1fr; gap: 2rem; } .about-visual { display: none; } .about-pillars { grid-template-columns: 1fr 1fr; gap: .75rem; } .pillar-card { padding: 1rem; } .pillar-title { font-size: .85rem; } .pillar-desc { font-size: .75rem; }
+    .token-grid { grid-template-columns: 1fr; gap: 1.5rem; } .token-supply-num { font-size: 1.4rem; }
+    .roadmap-track::before { left: 22px; } .roadmap-dot { width: 46px; height: 46px; font-size: 1rem; } .roadmap-item { gap: 1rem; } .roadmap-content { padding: 1.25rem; } .roadmap-phase { font-size: 1rem; } .roadmap-items li { font-size: .82rem; }
+    .team-grid { grid-template-columns: 1fr 1fr; gap: 1rem; } .team-card { padding: 1.5rem 1rem; } .team-avatar { width: 56px; height: 56px; font-size: 1.4rem; } .team-name { font-size: .9rem; } .team-bio { font-size: .78rem; }
+    .wp-card { padding: 2.5rem 1.5rem; border-radius: 14px; } .wp-title { font-size: 1.3rem; } .wp-meta { gap: 1rem; } .wp-meta-val { font-size: .78rem; }
+    .collab-grid { grid-template-columns: 1fr; gap: 2rem; } .collab-form { padding: 1.75rem 1.25rem; }
+    footer { flex-direction: column; text-align: center; padding: 2rem 4%; gap: 1rem; } .footer-links { justify-content: center; gap: 1rem; } .footer-copy { font-size: .72rem; }
+    .pd-step { gap: 12px; } .pd-step-icon { width: 44px; height: 44px; font-size: 18px; border-radius: 10px; } .pd-arrow { padding-left: 60px; } .pd-step-body { padding: 16px 18px; }
+    .ico-widget-stats { gap: 6px; }
+  }
+  @media (max-width: 400px) {
+    .hero-title { font-size: 2rem; } .about-pillars { grid-template-columns: 1fr; } .team-grid { grid-template-columns: 1fr; }
+    .stat-item { flex: 0 0 100%; border-right: none; } .stat-item:nth-child(odd) { border-right: none; }
+    .section-title { font-size: 1.8rem; } .wp-meta { flex-direction: column; align-items: center; gap: .75rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav>
+  <a href="#hero" class="nav-logo">
+    <div class="nav-logo-icon">
+      <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="30,4 52,17 52,43 30,56 8,43 8,17" fill="#0D1F35" stroke="#00BFA5" stroke-width="2"/>
+        <polygon points="30,12 46,21 46,39 30,48 14,39 14,21" fill="none" stroke="#00897B" stroke-width="1.5" opacity=".6"/>
+        <text x="10" y="40" font-family="Arial Black" font-size="22" font-weight="900" fill="#00BFA5">P</text>
+        <text x="26" y="40" font-family="Arial Black" font-size="22" font-weight="900" fill="#F4A81D">D</text>
+      </svg>
+    </div>
+    <div class="nav-logo-text">Pay<span>Duka</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#how-it-works">How It Works</a></li>
+    <li><a href="#tokenomics">Tokenomics</a></li>
+    <li><a href="#roadmap">Roadmap</a></li>
+    <li><a href="#team">Team</a></li>
+    <li><a href="#whitepaper">Whitepaper</a></li>
+    <li><a href="monetary-policy.html">Monetary Policy</a></li>
+    <li><a href="#ico" class="nav-buy">Buy PDuka</a></li>
+    <li><a href="#collaborate" class="nav-cta">Collaborate</a></li>
+  </ul>
+  <button class="nav-hamburger" id="hamburger" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- ── MOBILE MENU ── -->
+<div class="mobile-menu" id="mobile-menu">
+  <a href="#about" class="mob-link">About</a>
+  <a href="#how-it-works" class="mob-link">How It Works</a>
+  <a href="#tokenomics" class="mob-link">Tokenomics</a>
+  <a href="#roadmap" class="mob-link">Roadmap</a>
+  <a href="#team" class="mob-link">Team</a>
+  <a href="#whitepaper" class="mob-link">Whitepaper</a>
+  <a href="monetary-policy.html" class="mob-link">Monetary Policy</a>
+  <a href="#ico" class="mob-buy">Buy PDuka Tokens</a>
+  <a href="#collaborate" class="mob-cta">Collaborate</a>
+</div>
+
+<!-- ── HERO ── -->
+<section id="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-content">
+    <div class="hero-badge">🌍 &nbsp; BUILT FOR AFRICA &nbsp;·&nbsp; POWERED BY POLYGON</div>
+    <h1 class="hero-title">
+      Retail Payments<br/>
+      <span class="teal">Reimagined</span> on<br/>
+      <span class="gold">Blockchain</span>
+    </h1>
+    <p class="hero-sub">
+      PayDuka empowers merchants with instant, ultra-low-cost crypto payments —
+      while enabling the unbanked, rewarding communities, and building Africa's
+      first Play-to-Earn retail ecosystem.
+    </p>
+    <div class="hero-buttons">
+      <a href="#ico" class="btn-primary">🚀 Buy PDuka Tokens</a>
+      <a href="#whitepaper" class="btn-outline">📄 Read Whitepaper</a>
+      <a href="#collaborate" class="btn-outline">🤝 Collaborate With Us</a>
+    </div>
+
+    <!-- ── ICO LIVE BOX ── -->
+    <div class="ico-box">
+      <div class="ico-label">⚡ Initial Coin Offering</div>
+      <div class="ico-live-badge"><span class="dot"></span> SEED ROUND — LIVE NOW</div>
+      <div class="ico-hero-title">PDuka Token Seed ICO · $0.005 per PDUKA</div>
+      <div class="ico-mini-stats">
+        <div class="ico-mini-stat">
+          <div class="ico-mini-val">$0.005</div>
+          <div class="ico-mini-label">Price</div>
+        </div>
+        <div class="ico-mini-stat">
+          <div class="ico-mini-val" id="hero-avail">1B</div>
+          <div class="ico-mini-label">Available</div>
+        </div>
+        <div class="ico-mini-stat">
+          <div class="ico-mini-val" id="hero-sold">0</div>
+          <div class="ico-mini-label">Sold</div>
+        </div>
+      </div>
+      <div class="ico-progress-wrap">
+        <div class="ico-progress-header">
+          <span>Seed Round Progress</span>
+          <span><strong id="hero-pct">0%</strong> of 1B sold</span>
+        </div>
+        <div class="ico-bar-bg">
+          <div class="ico-bar-fill" id="hero-bar"></div>
+        </div>
+      </div>
+      <div class="ico-box-actions">
+        <a href="#ico" class="btn-buy-now">Buy PDuka Tokens Now</a>
+        <a href="https://polygonscan.com/address/0xD8358ba36723b860FFC8E9830060a8Cf348B84d3" target="_blank" class="btn-view-contract">View Contract ↗</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── STATS STRIP ── -->
+<div class="stats-strip">
+  <div class="stat-item"><span class="stat-num">21B</span><span class="stat-label">PDuka Total Supply</span></div>
+  <div class="stat-item"><span class="stat-num">44M+</span><span class="stat-label">Target SMEs in Africa</span></div>
+  <div class="stat-item"><span class="stat-num">&lt;$0.01</span><span class="stat-label">Per Transaction Fee</span></div>
+  <div class="stat-item"><span class="stat-num">$800B+</span><span class="stat-label">African Retail Market</span></div>
+  <div class="stat-item"><span class="stat-num">8–15%</span><span class="stat-label">Estimated Staking APY</span></div>
+</div>
+
+<!-- ── ICO BUY SECTION ── -->
+<section id="ico">
+  <div class="ico-section-inner">
+    <div class="ico-section-header reveal">
+      <p class="section-tag">// PDuka Token ICO</p>
+      <h2 class="section-title">Buy <span>PDuka</span> Tokens</h2>
+      <p class="section-sub" style="margin:0 auto;text-align:center">Seed price · $0.005 per PDUKA · Polygon Mainnet · Pay with USDC or POL</p>
+    </div>
+
+    <!-- Stats -->
+    <div class="ico-widget reveal">
+      <div class="ico-widget-stats">
+        <div class="iws"><div class="iws-val">$0.005</div><div class="iws-label">Token Price</div></div>
+        <div class="iws"><div class="iws-val" id="ico-avail">1B</div><div class="iws-label">Available</div></div>
+        <div class="iws"><div class="iws-val" id="ico-sold">0</div><div class="iws-label">Tokens Sold</div></div>
+      </div>
+
+      <!-- Progress -->
+      <div class="ico-progress-section">
+        <div class="ico-p-header">
+          <span>Seed Round Progress</span>
+          <span><strong id="ico-pct">0%</strong> of 1B PDuka sold</span>
+        </div>
+        <div class="ico-p-bg"><div class="ico-p-fill" id="ico-bar"></div></div>
+      </div>
+
+      <!-- Buy Card -->
+      <div class="ico-card-title">Purchase</div>
+
+      <!-- Not connected -->
+      <div id="ico-section-connect">
+        <button class="btn-ico-connect" onclick="icoConnect()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+          Connect Wallet
+        </button>
+        <p style="text-align:center;font-size:11px;color:var(--muted);margin-top:12px;font-family:'Space Mono',monospace;">MetaMask · Trust Wallet · Any WalletConnect wallet · Polygon Mainnet</p>
+      </div>
+
+      <!-- Connected -->
+      <div id="ico-section-buy" style="display:none">
+        <div class="ico-wallet-status">
+          <span class="wdot"></span>
+          <span id="ico-wallet-addr">Connected</span>
+        </div>
+
+        <div class="ico-tabs">
+          <button class="ico-tab active" id="ico-tab-usdc" onclick="icoSwitchTab('usdc')">USDC</button>
+          <button class="ico-tab" id="ico-tab-pol" onclick="icoSwitchTab('pol')">POL</button>
+        </div>
+
+        <div class="ico-input-group">
+          <label class="ico-input-label">You Pay</label>
+          <div class="ico-input-row">
+            <input type="number" id="ico-pay" placeholder="0.00" min="0" step="any" oninput="icoCalc()"/>
+            <span class="ico-input-tag" id="ico-pay-tag">USDC</span>
+          </div>
+        </div>
+
+        <div class="ico-receive-box">
+          <div><div class="ico-recv-label">You Receive</div></div>
+          <div>
+            <div class="ico-recv-amount" id="ico-recv">0 PDUKA</div>
+            <div class="ico-recv-sub" id="ico-recv-usd">≈ $0.00</div>
+          </div>
+        </div>
+
+        <button class="btn-ico-buy" id="ico-btn-buy" onclick="icoBuy()">Buy PDuka Tokens</button>
+
+        <div style="margin-top:14px;">
+          <div class="ico-info-row"><span class="ik">Price per PDUKA</span><span class="iv gold">$0.005</span></div>
+          <div class="ico-info-row"><span class="ik">Network</span><span class="iv green">Polygon Mainnet ✓</span></div>
+          <div class="ico-info-row"><span class="ik">Min Purchase</span><span class="iv">$1 USDC or 1 POL</span></div>
+          <div class="ico-info-row"><span class="ik">Price Feed</span><span class="iv">Chainlink Live Oracle</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contract Details -->
+    <div class="ico-contract-card reveal">
+      <div class="ico-card-title" style="margin-bottom:12px">Contract Details</div>
+      <div class="ico-info-row">
+        <span class="ik">ICO Contract</span>
+        <span class="iv ico-contract-addr" onclick="icoCopyAddr('0xD8358ba36723b860FFC8E9830060a8Cf348B84d3')" title="Click to copy">0xD8358b...84d3 📋</span>
+      </div>
+      <div class="ico-info-row">
+        <span class="ik">PDuka Token</span>
+        <span class="iv ico-contract-addr" onclick="icoCopyAddr('0x5025053F6Dec8C8Cfa85AE24C0CB9e4935C98E54')" title="Click to copy">0x50250...E54 📋</span>
+      </div>
+      <div class="ico-info-row"><span class="ik">Blockchain</span><span class="iv green">Polygon (MATIC/POL)</span></div>
+      <div class="ico-info-row"><span class="ik">Payment Methods</span><span class="iv">USDC &amp; POL</span></div>
+      <div class="ico-info-row"><span class="ik">Seed Allocation</span><span class="iv">1,000,000,000 PDUKA</span></div>
+      <div style="margin-top:14px;text-align:center;">
+        <a href="https://polygonscan.com/address/0xD8358ba36723b860FFC8E9830060a8Cf348B84d3" target="_blank" style="font-size:11px;color:var(--teal3);text-decoration:none;font-family:'Space Mono',monospace;">View on PolygonScan ↗</a>
+      </div>
+    </div>
+
+    <p style="text-align:center;font-size:11px;color:var(--muted);margin-top:16px;font-family:'Space Mono',monospace;line-height:1.6;">Not financial advice. Cryptocurrency investments carry risk. Participate at your own risk.</p>
+  </div>
+</section>
+
+<!-- ── ABOUT ── -->
+<section id="about">
+  <div class="about-grid">
+    <div class="about-visual reveal">
+      <div class="hex-visual">
+        <svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+          <defs><filter id="glow"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+          <polygon points="150,20 240,70 240,170 150,220 60,170 60,70" fill="none" stroke="#00897B" stroke-width="1.5" opacity=".3"/>
+          <polygon points="150,40 220,82 220,158 150,200 80,158 80,82" fill="none" stroke="#00897B" stroke-width="1.5" opacity=".5"/>
+          <polygon points="150,58 202,88 202,148 150,178 98,148 98,88" fill="none" stroke="#00BFA5" stroke-width="2" opacity=".7"/>
+          <polygon points="150,75 188,97 188,141 150,163 112,141 112,97" fill="#0D1F35" stroke="#00BFA5" stroke-width="2.5"/>
+          <text x="112" y="148" font-family="Arial Black" font-size="54" font-weight="900" fill="#00BFA5" filter="url(#glow)">P</text>
+          <text x="147" y="148" font-family="Arial Black" font-size="54" font-weight="900" fill="#F4A81D" filter="url(#glow)">D</text>
+          <circle cx="150" cy="20" r="6" fill="#F4A81D" filter="url(#glow)"/>
+          <circle cx="240" cy="70" r="5" fill="#00BFA5" filter="url(#glow)"/>
+          <circle cx="240" cy="170" r="5" fill="#F4A81D" filter="url(#glow)"/>
+          <circle cx="150" cy="220" r="6" fill="#00BFA5" filter="url(#glow)"/>
+          <circle cx="60" cy="170" r="5" fill="#F4A81D" filter="url(#glow)"/>
+          <circle cx="60" cy="70" r="5" fill="#00BFA5" filter="url(#glow)"/>
+          <line x1="150" y1="20" x2="240" y2="170" stroke="#F4A81D" stroke-width=".7" opacity=".2"/>
+          <line x1="240" y1="70" x2="60" y2="170" stroke="#00BFA5" stroke-width=".7" opacity=".2"/>
+          <line x1="240" y1="170" x2="60" y2="70" stroke="#F4A81D" stroke-width=".7" opacity=".2"/>
+        </svg>
+      </div>
+    </div>
+    <div class="reveal">
+      <p class="section-tag">// About PayDuka</p>
+      <h2 class="section-title">Africa's Retail<br/><span>Payment Revolution</span></h2>
+      <p class="section-sub" style="margin-bottom:2.5rem">PayDuka is a blockchain-powered retail ecosystem built on Polygon, designed to eliminate cash dependency, reduce transaction costs by up to 95%, and extend financial access to millions of unbanked Africans — starting now.</p>
+      <div class="about-pillars">
+        <div class="pillar-card"><div class="pillar-icon">💳</div><div class="pillar-title">Retail Payments</div><div class="pillar-desc">Accept crypto & fiat at any PoS. Instant stablecoin settlement.</div></div>
+        <div class="pillar-card"><div class="pillar-icon">🏦</div><div class="pillar-title">Staking</div><div class="pillar-desc">Earn 8–15% APY by staking PDuka. Passive income for all.</div></div>
+        <div class="pillar-card"><div class="pillar-icon">🎮</div><div class="pillar-title">Play-to-Earn</div><div class="pillar-desc">Mobile games that reward users with real PDuka tokens daily.</div></div>
+        <div class="pillar-card"><div class="pillar-icon">🗳️</div><div class="pillar-title">Governance</div><div class="pillar-desc">Token holders vote on protocol upgrades & ecosystem decisions.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── HOW IT WORKS ── -->
+<section id="how-it-works">
+  <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,rgba(0,137,123,.08) 0%,transparent 70%);pointer-events:none;"></div>
+  <div style="max-width:900px;margin:0 auto;position:relative;z-index:2;">
+    <div class="reveal" style="margin-bottom:3.5rem;">
+      <p class="section-tag">// How It Works</p>
+      <h2 class="section-title">Card Payment Flow<br/><span>Reimagined for Africa</span></h2>
+      <p class="section-sub">Every card swipe on a PayDuka PoS triggers instant on-chain settlement — merchants get paid immediately, fees are reimbursed, and PDuka supply deflates with every transaction.</p>
+    </div>
+    <div id="pd-flow-wrapper" style="position:relative;">
+      <div style="position:absolute;left:27px;top:32px;bottom:32px;width:2px;background:linear-gradient(to bottom,var(--teal),var(--gold),rgba(0,191,165,.1));opacity:.25;pointer-events:none;"></div>
+      <div id="pd-flow-line" style="position:absolute;left:27px;top:32px;width:2px;height:0;background:linear-gradient(to bottom,var(--teal2),var(--gold));transition:height 3.5s ease;z-index:1;pointer-events:none;"></div>
+      <div class="pd-step">
+        <div class="pd-step-icon" style="background:rgba(0,137,123,.15);border:1px solid rgba(0,191,165,.25);box-shadow:0 0 18px rgba(0,191,165,.1);">💳</div>
+        <div class="pd-step-body"><div class="pd-step-num">STEP 01</div><div class="pd-step-title">Customer Taps or Swipes</div><div class="pd-step-desc">The merchant's PayDuka terminal accepts the payment. The PoS broadcasts a signed transaction to Polygon in under 2 seconds.</div><span class="pd-badge pd-badge-teal">sub-2s response</span></div>
+      </div>
+      <div class="pd-arrow">↓</div>
+      <div class="pd-step">
+        <div class="pd-step-icon" style="background:rgba(244,168,29,.1);border:1px solid rgba(244,168,29,.25);box-shadow:0 0 18px rgba(244,168,29,.08);">🔗</div>
+        <div class="pd-step-body"><div class="pd-step-num">STEP 02</div><div class="pd-step-title">On-Chain Settlement</div><div class="pd-step-desc">Polygon confirms the block. The stablecoin (USDC/USDT) is transferred directly to the merchant wallet — no bank, no delays.</div><span class="pd-badge pd-badge-gold">gas &lt; $0.01</span></div>
+      </div>
+      <div class="pd-arrow">↓</div>
+      <div class="pd-step">
+        <div class="pd-step-icon" style="background:rgba(100,255,218,.07);border:1px solid rgba(100,255,218,.2);box-shadow:0 0 18px rgba(100,255,218,.06);">🔥</div>
+        <div class="pd-step-body"><div class="pd-step-num">STEP 03</div><div class="pd-step-title">PDuka Burn & Reward</div><div class="pd-step-desc">0.1% of each transaction burns PDuka tokens, reducing supply. Both merchant and customer earn PDuka loyalty rewards automatically.</div><span class="pd-badge pd-badge-teal3">deflationary</span></div>
+      </div>
+      <div class="pd-arrow">↓</div>
+      <div class="pd-step">
+        <div class="pd-step-icon" style="background:rgba(0,137,123,.15);border:1px solid rgba(0,191,165,.25);">📊</div>
+        <div class="pd-step-body"><div class="pd-step-num">STEP 04</div><div class="pd-step-title">Real-Time Dashboard</div><div class="pd-step-desc">Merchants see live revenue, PDuka earned, and transaction history. Export to any accounting software. Full on-chain audit trail.</div><span class="pd-badge pd-badge-teal">fully transparent</span></div>
+      </div>
+      <div class="pd-arrow">↓</div>
+      <div class="pd-step">
+        <div class="pd-step-icon" style="background:rgba(244,168,29,.1);border:1px solid rgba(244,168,29,.25);">🌍</div>
+        <div class="pd-step-body">
+          <div class="pd-step-num">STEP 05</div><div class="pd-step-title">Ecosystem Growth</div>
+          <div class="pd-step-desc">PDuka earned can be staked for APY, used in Play-to-Earn games, or held for governance. Every transaction strengthens the entire ecosystem.</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;">
+            <span class="pd-badge pd-badge-gold">8–15% staking</span>
+            <span class="pd-badge pd-badge-teal3">P2E games</span>
+            <div style="display:inline-flex;align-items:center;gap:6px;margin-top:10px;padding:4px 12px;border-radius:100px;font-size:.7rem;font-weight:600;background:rgba(0,137,123,.12);color:var(--teal2);border:1px solid rgba(0,191,165,.25);">Polygon PoS · sub-cent fees</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── TOKENOMICS ── -->
+<section id="tokenomics">
+  <div class="section-header reveal" style="max-width:1100px;margin:0 auto 4rem">
+    <p class="section-tag">// Tokenomics</p>
+    <h2 class="section-title">PDuka <span>Token</span> Economics</h2>
+    <p class="section-sub">A deflationary utility token powering every layer of the PayDuka ecosystem — payments, staking, gaming, and governance.</p>
+  </div>
+  <div class="token-grid" style="max-width:1100px;margin:0 auto">
+    <div class="reveal">
+      <div class="token-info-box">
+        <div class="token-supply">TOTAL FIXED SUPPLY</div>
+        <div class="token-supply-num">21,000,000,000</div>
+        <div class="token-supply-label">PDuka Tokens &nbsp;·&nbsp; No additional minting ever</div>
+        <div class="token-badges">
+          <span class="token-badge">ERC-20</span><span class="token-badge">Polygon L2</span><span class="token-badge">Deflationary</span><span class="token-badge">Burn Mechanism</span><span class="token-badge">Live on Mainnet</span>
+        </div>
+      </div>
+      <div class="token-info-box">
+        <div class="token-supply" style="margin-bottom:.75rem">TOKEN UTILITY</div>
+        <div style="display:flex;flex-direction:column;gap:.6rem">
+          <div style="display:flex;gap:.75rem;align-items:center"><span style="font-size:1.1rem">💳</span><span style="font-size:.875rem;color:var(--muted)"><strong style="color:var(--white)">Payments</strong> — 30–60% merchant fee discount vs card</span></div>
+          <div style="display:flex;gap:.75rem;align-items:center"><span style="font-size:1.1rem">💰</span><span style="font-size:.875rem;color:var(--muted)"><strong style="color:var(--white)">Staking</strong> — 8–15% APY, 30–365 day lock-up</span></div>
+          <div style="display:flex;gap:.75rem;align-items:center"><span style="font-size:1.1rem">🎮</span><span style="font-size:.875rem;color:var(--muted)"><strong style="color:var(--white)">Gaming</strong> — Entry fees, in-game rewards, prizes</span></div>
+          <div style="display:flex;gap:.75rem;align-items:center"><span style="font-size:1.1rem">🗳️</span><span style="font-size:.875rem;color:var(--muted)"><strong style="color:var(--white)">Governance</strong> — 1 staked PDuka = 1 vote</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="reveal">
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:16px;padding:2rem">
+        <div style="font-family:'Space Mono',monospace;font-size:.72rem;color:var(--muted);letter-spacing:1px;margin-bottom:1.5rem">TOKEN ALLOCATION</div>
+        <div class="alloc-list">
+          <div class="alloc-item"><div class="alloc-header"><span class="alloc-name">Ecosystem Growth & Rewards</span><span class="alloc-pct">40%</span></div><div class="alloc-bar"><div class="alloc-fill" style="width:40%;background:linear-gradient(90deg,var(--teal),var(--teal2))"></div></div><div class="alloc-sub">8.4B tokens — User incentives, merchant onboarding, gaming rewards</div></div>
+          <div class="alloc-item"><div class="alloc-header"><span class="alloc-name">Staking Rewards Reserve</span><span class="alloc-pct">20%</span></div><div class="alloc-bar"><div class="alloc-fill" style="width:20%;background:linear-gradient(90deg,var(--gold),var(--gold2))"></div></div><div class="alloc-sub">4.2B tokens — 5-year yield distribution schedule</div></div>
+          <div class="alloc-item"><div class="alloc-header"><span class="alloc-name">Protocol Development</span><span class="alloc-pct">15%</span></div><div class="alloc-bar"><div class="alloc-fill" style="width:15%;background:linear-gradient(90deg,var(--teal2),#64FFDA)"></div></div><div class="alloc-sub">3.15B tokens — 24-month vesting schedule</div></div>
+          <div class="alloc-item"><div class="alloc-header"><span class="alloc-name">Liquidity Provision</span><span class="alloc-pct">15%</span></div><div class="alloc-bar"><div class="alloc-fill" style="width:15%;background:linear-gradient(90deg,#00BFA5,#00897B)"></div></div><div class="alloc-sub">3.15B tokens — CEX/DEX market making (OKX, KuCoin)</div></div>
+          <div class="alloc-item"><div class="alloc-header"><span class="alloc-name">Team & Advisors</span><span class="alloc-pct">10%</span></div><div class="alloc-bar"><div class="alloc-fill" style="width:10%;background:linear-gradient(90deg,var(--gold),#F4A81D)"></div></div><div class="alloc-sub">2.1B tokens — 6-month cliff, 24-month linear vest</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ROADMAP ── -->
+<section id="roadmap">
+  <div class="section-header reveal" style="max-width:900px;margin:0 auto 4rem">
+    <p class="section-tag">// Roadmap</p>
+    <h2 class="section-title">Building the <span>Future</span></h2>
+    <p class="section-sub">A phased rollout that builds trust at every step — from prototype to continent-wide adoption.</p>
+  </div>
+  <div class="roadmap-track">
+    <div class="roadmap-item active reveal">
+      <div class="roadmap-dot">🏗️</div>
+      <div class="roadmap-content">
+        <div class="roadmap-q">Q1 2026 — CURRENT PHASE</div>
+        <div class="roadmap-phase">Foundation</div>
+        <ul class="roadmap-items">
+          <li class="done">Whitepaper publication & public release</li>
+          <li class="done">PDuka smart contract deployed to Polygon Mainnet</li>
+          <li class="done">PDuka Token ICO live — Seed Round ($0.005/PDUKA)</li>
+          <li>Mobile wallet prototype (iOS & Android)</li>
+          <li>Legal & compliance framework across target jurisdictions</li>
+          <li>Core team expansion & advisor onboarding</li>
+        </ul>
+      </div>
+    </div>
+    <div class="roadmap-item reveal">
+      <div class="roadmap-dot">🚀</div>
+      <div class="roadmap-content">
+        <div class="roadmap-q">Q2 2026</div>
+        <div class="roadmap-phase">Build & Pilot</div>
+        <ul class="roadmap-items">
+          <li>Merchant PoS terminal software launch (Android)</li>
+          <li>Pilot: 50 merchants in Nairobi & Johannesburg</li>
+          <li>Staking contract deployment on Polygon testnet</li>
+          <li>Third-party smart contract security audit</li>
+          <li>First exchange partnership announcements</li>
+        </ul>
+      </div>
+    </div>
+    <div class="roadmap-item reveal">
+      <div class="roadmap-dot">🎮</div>
+      <div class="roadmap-content">
+        <div class="roadmap-q">Q3 2026</div>
+        <div class="roadmap-phase">Gaming Launch</div>
+        <ul class="roadmap-items">
+          <li>Play-to-Earn platform beta: Market Tycoon & PayDuka Quiz</li>
+          <li>Full staking pool live on Polygon mainnet</li>
+          <li>500 active PoS terminals target</li>
+          <li>Community governance module deployment</li>
+          <li>Ambassador programme across 5 African countries</li>
+        </ul>
+      </div>
+    </div>
+    <div class="roadmap-item reveal">
+      <div class="roadmap-dot">📈</div>
+      <div class="roadmap-content">
+        <div class="roadmap-q">Q4 2026</div>
+        <div class="roadmap-phase">Token Listing & Expansion</div>
+        <ul class="roadmap-items">
+          <li>PDuka listed on OKX, KuCoin & Uniswap/QuickSwap</li>
+          <li>Hardware PoS terminal with solar charging</li>
+          <li>Cross-border payments: East Africa corridor</li>
+          <li>2,000+ active merchants by year end</li>
+          <li>Stablecoin issuance roadmap published</li>
+        </ul>
+      </div>
+    </div>
+    <div class="roadmap-item reveal">
+      <div class="roadmap-dot">🌍</div>
+      <div class="roadmap-content">
+        <div class="roadmap-q">2027+</div>
+        <div class="roadmap-phase">Scale Africa & Beyond</div>
+        <ul class="roadmap-items">
+          <li>Expansion to West Africa (Nigeria, Ghana) & Southeast Asia</li>
+          <li>PDuka-pegged stablecoin for fiat-settled transactions</li>
+          <li>Developer SDK for third-party PoS integrations</li>
+          <li>20,000+ merchants, $100M+ annual payment volume</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── TEAM ── -->
+<section id="team">
+  <div class="section-header reveal" style="text-align:center;max-width:600px;margin:0 auto 4rem">
+    <p class="section-tag">// The Team</p>
+    <h2 class="section-title">Meet the <span>Builders</span></h2>
+    <p class="section-sub" style="margin:0 auto">A passionate team with deep roots in African markets, blockchain technology, and community growth.</p>
+  </div>
+  <div class="team-grid">
+    <div class="team-card reveal"><div class="team-avatar">👨‍💼</div><div class="team-name">Mr X.G. Sikhosana</div><div class="team-role">Founder & CEO</div><div class="team-bio">Visionary entrepreneur and blockchain strategist. XG founded PayDuka to eliminate cash friction and financial exclusion across Africa's retail sector.</div></div>
+    <div class="team-card reveal"><div class="team-avatar">👨‍💻</div><div class="team-name">Mr G. Jako</div><div class="team-role">Chief Technology Officer</div><div class="team-bio">Blockchain architect and full-stack engineer overseeing PayDuka's Polygon smart contracts, PoS infrastructure, and mobile wallet development.</div></div>
+    <div class="team-card reveal"><div class="team-avatar">👩‍💼</div><div class="team-name">Mrs J. Ndlangamandla</div><div class="team-role">Head of Operations</div><div class="team-bio">Strategic operations leader driving merchant onboarding, partner relationships, and day-to-day ecosystem management across all markets.</div></div>
+    <div class="team-card reveal"><div class="team-avatar">📣</div><div class="team-name">Mr N. Ndlangamandla</div><div class="team-role">Head of Community & Marketing</div><div class="team-bio">Community builder and brand strategist growing PayDuka's DeFi presence, managing ambassador networks and coordinating exchange listing campaigns.</div></div>
+  </div>
+</section>
+
+<!-- ── WHITEPAPER ── -->
+<section id="whitepaper">
+  <div class="wp-card reveal">
+    <span class="wp-icon">📄</span>
+    <h2 class="wp-title">PayDuka Whitepaper v2.0</h2>
+    <p class="wp-desc">Our full technical and economic whitepaper covers the PayDuka ecosystem architecture, PDuka token economics, smart contract design, market opportunity, roadmap, franchise strategy, and legal framework. Required reading for investors, developers, and partners.</p>
+    <div class="wp-meta">
+      <div class="wp-meta-item"><span class="wp-meta-val">v2.0</span><span class="wp-meta-key">Version</span></div>
+      <div class="wp-meta-item"><span class="wp-meta-val">March 2026</span><span class="wp-meta-key">Published</span></div>
+      <div class="wp-meta-item"><span class="wp-meta-val">19 Sections</span><span class="wp-meta-key">Coverage</span></div>
+      <div class="wp-meta-item"><span class="wp-meta-val">Polygon</span><span class="wp-meta-key">Blockchain</span></div>
+    </div>
+    <a href="PayDuka_Whitepaper_v1.pdf" download class="btn-primary" style="display:inline-block">⬇️ &nbsp; Download Whitepaper (PDF)</a>
+  </div>
+</section>
+
+<!-- ── COLLABORATE ── -->
+<section id="collaborate">
+  <div class="collab-grid">
+    <div class="reveal">
+      <p class="section-tag">// Collaborate</p>
+      <h2 class="section-title">Join the <span>Ecosystem</span></h2>
+      <p class="section-sub" style="margin-bottom:2rem">PayDuka is bigger than one team. We're looking for builders, merchants, investors, and communities who share the vision of a truly open African financial ecosystem.</p>
+      <div class="collab-types">
+        <div class="collab-type"><div class="collab-type-icon">🏪</div><div><div class="collab-type-title">Merchant Partners</div><div class="collab-type-desc">Be among the first retailers to accept PDuka and cut your payment fees by up to 95%.</div></div></div>
+        <div class="collab-type"><div class="collab-type-icon">💰</div><div><div class="collab-type-title">Angel Investors</div><div class="collab-type-desc">Join our $2.5M angel round and be part of Africa's blockchain payment revolution from the ground up.</div></div></div>
+        <div class="collab-type"><div class="collab-type-icon">👨‍💻</div><div><div class="collab-type-title">Developers & Builders</div><div class="collab-type-desc">Contribute to open-source smart contracts, PoS integrations, or build on the PayDuka developer SDK.</div></div></div>
+        <div class="collab-type"><div class="collab-type-icon">🌍</div><div><div class="collab-type-title">Community Ambassadors</div><div class="collab-type-desc">Represent PayDuka in your city. Earn PDuka rewards for growing the network on the ground.</div></div></div>
+      </div>
+    </div>
+    <div class="collab-form reveal">
+      <div class="form-title">Get In Touch 👋</div>
+      <div class="form-group"><label>YOUR NAME</label><input id="form-name" type="text" placeholder="Full name"/></div>
+      <div class="form-group"><label>EMAIL ADDRESS</label><input id="form-email" type="email" placeholder="you@example.com"/></div>
+      <div class="form-group">
+        <label>I AM A...</label>
+        <select id="form-role">
+          <option value="">Select your role</option>
+          <option>Merchant / Retailer</option><option>Angel Investor</option><option>Blockchain Developer</option>
+          <option>Community Ambassador</option><option>Strategic Partner</option><option>Media / Press</option><option>Other</option>
+        </select>
+      </div>
+      <div class="form-group"><label>MESSAGE</label><textarea id="form-message" placeholder="Tell us about yourself and how you'd like to collaborate..."></textarea></div>
+      <button id="form-btn" class="btn-primary" style="width:100%;font-size:1rem;padding:1rem" onclick="sendMailto()">Send Message 🚀</button>
+      <div style="margin-top:1.25rem;padding:1.25rem;border-radius:10px;background:rgba(0,191,165,.05);border:1px solid var(--border);text-align:center;">
+        <p style="font-size:.75rem;color:var(--muted);font-family:'Space Mono',monospace;margin-bottom:1rem;letter-spacing:.5px;">OR CONTACT US DIRECTLY</p>
+        <a href="mailto:info@payduka.xyz" style="display:block;color:var(--teal2);font-family:'Space Mono',monospace;font-size:1rem;font-weight:700;text-decoration:none;margin-bottom:.75rem;letter-spacing:.5px;">📧 info@payduka.xyz</a>
+        <a href="https://wa.me/27617620692" target="_blank" style="display:block;color:#25D366;font-family:'Space Mono',monospace;font-size:1rem;font-weight:700;text-decoration:none;">💬 WhatsApp Us</a>
+      </div>
+      <div style="margin-top:1.25rem;border-top:1px solid var(--border);padding-top:1.25rem;display:flex;flex-direction:column;gap:.75rem;">
+        <a href="https://www.linkedin.com/company/payduka" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:.75rem;padding:.85rem 1rem;border-radius:8px;background:rgba(0,119,181,.1);border:1px solid rgba(0,119,181,.3);color:#0077B5;text-decoration:none;font-family:'Space Mono',monospace;font-size:.82rem;font-weight:700;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="#0077B5"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+          Follow on LinkedIn
+        </a>
+        <a href="https://discord.gg/SX5XacqrP3" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:.75rem;padding:.85rem 1rem;border-radius:8px;background:rgba(88,101,242,.1);border:1px solid rgba(88,101,242,.3);color:#5865F2;text-decoration:none;font-family:'Space Mono',monospace;font-size:.82rem;font-weight:700;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="#5865F2"><path d="M20.317 4.37a19.791 19.791 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037A19.736 19.736 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057c.002.022.015.043.033.053a19.874 19.874 0 005.993 3.03.078.078 0 00.084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 00-.041-.106 13.107 13.107 0 01-1.872-.892.077.077 0 01-.008-.128 10.2 10.2 0 00.372-.292.074.074 0 01.077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 01.078.01c.12.098.246.198.373.292a.077.077 0 01-.006.127 12.299 12.299 0 01-1.873.892.077.077 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 00.084.028 19.839 19.839 0 006.002-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 00-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
+          Join Discord
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-logo">Pay<span>Duka</span></div>
+  <ul class="footer-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#how-it-works">How It Works</a></li>
+    <li><a href="#tokenomics">Tokenomics</a></li>
+    <li><a href="#roadmap">Roadmap</a></li>
+    <li><a href="#team">Team</a></li>
+    <li><a href="#whitepaper">Whitepaper</a></li>
+    <li><a href="monetary-policy.html">Monetary Policy</a></li>
+    <li><a href="#ico">Buy PDuka</a></li>
+    <li><a href="#collaborate">Collaborate</a></li>
+  </ul>
+  <div class="footer-copy">© 2026 PayDuka · Built on Polygon · payduka.xyz</div>
+</footer>
+
+<!-- ── TOAST ── -->
+<div class="ico-toast" id="ico-toast"></div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+// ICO WIDGET CONFIG
+// ═══════════════════════════════════════════════════════════════
+const ICO_CONFIG = {
+  ICO_CONTRACT:     "0xD8358ba36723b860FFC8E9830060a8Cf348B84d3",
+  PDUKA_TOKEN:      "0x5025053F6Dec8C8Cfa85AE24C0CB9e4935C98E54",
+  USDC_CONTRACT:    "0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359", // Native USDC on Polygon
+  POLYGON_CHAIN_ID: 137,
+  SEED_PRICE_USD:   0.005,
+  ICO_ALLOCATION:   1_000_000_000,
+  RPC:              "https://polygon-bor-rpc.publicnode.com",
+};
+
+const ICO_ABI = [
+  "function buyWithUSDC(uint256 usdcAmount) external",
+  "function buyWithPOL() external payable",
+  "function totalSold() external view returns (uint256)",
+  "function remainingAllocation() external view returns (uint256)",
+  "function icoBalance() external view returns (uint256)",
+  "function icoActive() external view returns (bool)",
+];
+
+const ERC20_ABI = [
+  "function approve(address spender, uint256 amount) external returns (bool)",
+  "function allowance(address owner, address spender) external view returns (uint256)",
+  "function balanceOf(address account) external view returns (uint256)",
+];
+
+let icoProvider, icoSigner, icoWalletAddress;
+let icoActiveTab = 'usdc';
+let icoPolPrice  = 0.6;
+
+// ─── INIT ─────────────────────────────────────────────────────
+window.addEventListener('load', async () => {
+  await icoFetchPolPrice();
+  await icoLoadStats();
+  setTimeout(() => {
+    const pct = parseFloat(document.getElementById('ico-bar').dataset.pct || 0);
+    document.getElementById('ico-bar').style.width    = pct + '%';
+    document.getElementById('hero-bar').style.width   = pct + '%';
+  }, 400);
+  if (window.ethereum?.selectedAddress) await icoConnect(true);
+});
+
+async function icoFetchPolPrice() {
+  try {
+    const r = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=matic-network&vs_currencies=usd');
+    const d = await r.json();
+    icoPolPrice = d['matic-network']?.usd || 0.6;
+  } catch {}
+}
+
+async function icoLoadStats() {
+  try {
+    const rpc = new ethers.JsonRpcProvider(ICO_CONFIG.RPC);
+    const ico  = new ethers.Contract(ICO_CONFIG.ICO_CONTRACT, ICO_ABI, rpc);
+    const [sold, remaining] = await Promise.all([
+      ico.totalSold().catch(() => 0n),
+      ico.remainingAllocation().catch(() => BigInt(ICO_CONFIG.ICO_ALLOCATION) * 10n**18n),
+    ]);
+    const soldTokens = Number(sold) / 1e18;
+    const remTokens  = Number(remaining) / 1e18;
+    const pct = Math.min((soldTokens / ICO_CONFIG.ICO_ALLOCATION) * 100, 100);
+
+    const fmtC = n => { if (n >= 1e9) return (n/1e9).toFixed(2)+'B'; if (n >= 1e6) return (n/1e6).toFixed(1)+'M'; if (n >= 1e3) return (n/1e3).toFixed(1)+'K'; return n.toFixed(0); };
+
+    // Update both ICO section and hero box
+    ['ico-avail','hero-avail'].forEach(id => { const el = document.getElementById(id); if (el) el.textContent = fmtC(remTokens); });
+    ['ico-sold','hero-sold'].forEach(id => { const el = document.getElementById(id); if (el) el.textContent = fmtC(soldTokens); });
+    ['ico-pct','hero-pct'].forEach(id => { const el = document.getElementById(id); if (el) el.textContent = pct.toFixed(2)+'%'; });
+    ['ico-bar','hero-bar'].forEach(id => { const el = document.getElementById(id); if (el) el.dataset.pct = pct; });
+  } catch (e) { console.warn('ICO stats fetch failed:', e); }
+}
+
+// ─── WALLET ───────────────────────────────────────────────────
+async function icoConnect(silent = false) {
+  if (!window.ethereum) {
+    if (!silent) icoToast('No wallet found. Install MetaMask or use a Web3 browser.', 'error');
+    return;
+  }
+  try {
+    icoProvider = new ethers.BrowserProvider(window.ethereum);
+    await icoProvider.send('eth_requestAccounts', []);
+    const network = await icoProvider.getNetwork();
+    if (Number(network.chainId) !== ICO_CONFIG.POLYGON_CHAIN_ID) await icoSwitchToPolygon();
+    icoSigner        = await icoProvider.getSigner();
+    icoWalletAddress = await icoSigner.getAddress();
+    document.getElementById('ico-section-connect').style.display = 'none';
+    document.getElementById('ico-section-buy').style.display     = 'block';
+    document.getElementById('ico-wallet-addr').textContent = icoWalletAddress.slice(0,6)+'...'+icoWalletAddress.slice(-4)+' ✓';
+    if (!silent) icoToast('Wallet connected!', 'success');
+  } catch (e) {
+    if (!silent) icoToast('Connection failed: '+(e.message||'Unknown error'), 'error');
+  }
+}
+
+async function icoSwitchToPolygon() {
+  try {
+    await window.ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: '0x89' }] });
+  } catch (e) {
+    if (e.code === 4902) {
+      await window.ethereum.request({ method: 'wallet_addEthereumChain', params: [{ chainId: '0x89', chainName: 'Polygon Mainnet', rpcUrls: ['https://polygon-rpc.com'], nativeCurrency: { name: 'POL', symbol: 'POL', decimals: 18 }, blockExplorerUrls: ['https://polygonscan.com'] }] });
+    }
+  }
+}
+
+// ─── TABS ─────────────────────────────────────────────────────
+function icoSwitchTab(tab) {
+  icoActiveTab = tab;
+  document.getElementById('ico-tab-usdc').classList.toggle('active', tab === 'usdc');
+  document.getElementById('ico-tab-pol').classList.toggle('active', tab === 'pol');
+  document.getElementById('ico-pay-tag').textContent = tab.toUpperCase();
+  document.getElementById('ico-pay').value = '';
+  document.getElementById('ico-recv').textContent = '0 PDUKA';
+  document.getElementById('ico-recv-usd').textContent = '≈ $0.00';
+}
+
+// ─── CALC ─────────────────────────────────────────────────────
+function icoCalc() {
+  const amount   = parseFloat(document.getElementById('ico-pay').value) || 0;
+  const usdValue = icoActiveTab === 'usdc' ? amount : amount * icoPolPrice;
+  const tokens   = usdValue / ICO_CONFIG.SEED_PRICE_USD;
+  const fmtN = n => { if (n >= 1e6) return (n/1e6).toFixed(2)+'M'; if (n >= 1e3) return (n/1e3).toFixed(1)+'K'; return n.toFixed(2); };
+  document.getElementById('ico-recv').textContent    = fmtN(tokens) + ' PDUKA';
+  document.getElementById('ico-recv-usd').textContent = '≈ $' + usdValue.toFixed(2);
+}
+
+// ─── BUY ──────────────────────────────────────────────────────
+async function icoBuy() {
+  const amount = parseFloat(document.getElementById('ico-pay').value);
+  if (!amount || amount <= 0) { icoToast('Enter a valid amount.', 'error'); return; }
+  const btn = document.getElementById('ico-btn-buy');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="ico-spinner"></span>';
+  try {
+    const ico = new ethers.Contract(ICO_CONFIG.ICO_CONTRACT, ICO_ABI, icoSigner);
+    if (icoActiveTab === 'usdc') {
+      const usdc      = new ethers.Contract(ICO_CONFIG.USDC_CONTRACT, ERC20_ABI, icoSigner);
+      const amountWei = ethers.parseUnits(amount.toString(), 6);
+      icoToast('Approving USDC...', 'info');
+      const allowance = await usdc.allowance(icoWalletAddress, ICO_CONFIG.ICO_CONTRACT);
+      if (allowance < amountWei) {
+        const approveTx = await usdc.approve(ICO_CONFIG.ICO_CONTRACT, amountWei);
+        await approveTx.wait();
+      }
+      icoToast('Sending transaction...', 'info');
+      const tx = await ico.buyWithUSDC(amountWei);
+      await tx.wait();
+    } else {
+      const amountWei = ethers.parseEther(amount.toString());
+      icoToast('Sending transaction...', 'info');
+      const tx = await ico.buyWithPOL({ value: amountWei });
+      await tx.wait();
+    }
+    icoToast('Purchase successful! PDuka tokens are in your wallet.', 'success');
+    document.getElementById('ico-pay').value = '';
+    icoCalc();
+    await icoLoadStats();
+    setTimeout(() => {
+      const pct = parseFloat(document.getElementById('ico-bar').dataset.pct || 0);
+      document.getElementById('ico-bar').style.width  = pct + '%';
+      document.getElementById('hero-bar').style.width = pct + '%';
+    }, 200);
+  } catch (e) {
+    const msg = e?.reason || e?.message || 'Transaction failed';
+    icoToast('Error: ' + msg.slice(0, 100), 'error');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = 'Buy PDuka Tokens';
+  }
+}
+
+// ─── UTILS ────────────────────────────────────────────────────
+function icoCopyAddr(fullAddr) {
+  navigator.clipboard.writeText(fullAddr).then(() => icoToast('Address copied!', 'info'));
+}
+
+let icoToastTimer;
+function icoToast(msg, type = 'info') {
+  const t = document.getElementById('ico-toast');
+  t.textContent = msg;
+  t.className = 'ico-toast ' + type + ' show';
+  clearTimeout(icoToastTimer);
+  icoToastTimer = setTimeout(() => t.classList.remove('show'), 4500);
+}
+
+// ═══════════════════════════════════════════════════════════════
+// GENERAL SITE SCRIPTS
+// ═══════════════════════════════════════════════════════════════
+
+// ── HAMBURGER ──
+const hamburger = document.getElementById('hamburger');
+const mobileMenu = document.getElementById('mobile-menu');
+hamburger.addEventListener('click', () => {
+  hamburger.classList.toggle('open');
+  mobileMenu.classList.toggle('open');
+});
+document.querySelectorAll('.mob-link, .mob-cta, .mob-buy').forEach(link => {
+  link.addEventListener('click', () => {
+    hamburger.classList.remove('open');
+    mobileMenu.classList.remove('open');
+  });
+});
+
+// ── SCROLL REVEAL ──
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) setTimeout(() => e.target.classList.add('visible'), i * 80);
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+// ── NAV SCROLL ──
+window.addEventListener('scroll', () => {
+  document.querySelector('nav').style.background = window.scrollY > 50 ? 'rgba(10,22,40,0.97)' : 'rgba(10,22,40,0.85)';
+});
+
+// ── MAILTO ──
+function sendMailto() {
+  const name    = document.getElementById('form-name').value.trim();
+  const email   = document.getElementById('form-email').value.trim();
+  const role    = document.getElementById('form-role').value || 'Not specified';
+  const message = document.getElementById('form-message').value.trim();
+  if (!name || !message) { alert('Please fill in your name and message.'); return; }
+  const subject = encodeURIComponent('PayDuka Collaboration Enquiry — ' + role);
+  const body    = encodeURIComponent('Name: '+name+'\nEmail: '+email+'\nRole: '+role+'\n\nMessage:\n'+message);
+  window.location.href = 'mailto:info@payduka.xyz?subject='+subject+'&body='+body;
+}
+
+// ── CARD PAYMENT FLOW ANIMATION ──
+(function() {
+  var steps = document.querySelectorAll('.pd-step');
+  var flowLine = document.getElementById('pd-flow-line');
+  var flowAnimated = false;
+  function runFlowAnimation() {
+    flowLine.style.transition = 'none';
+    flowLine.style.height = '0px';
+    setTimeout(function() {
+      flowLine.style.transition = 'height 3.5s ease';
+      var wrapper = document.getElementById('pd-flow-wrapper');
+      flowLine.style.height = (wrapper.offsetHeight - 64) + 'px';
+    }, 100);
+    steps.forEach(function(step, i) {
+      step.style.opacity = '0';
+      step.style.transform = 'translateX(-20px)';
+      setTimeout(function() { step.style.opacity = '1'; step.style.transform = 'translateX(0)'; }, 300 + i * 400);
+    });
+  }
+  var section = document.getElementById('how-it-works');
+  if (section) {
+    new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting && !flowAnimated) { flowAnimated = true; runFlowAnimation(); }
+      });
+    }, { threshold: 0.1 }).observe(section);
+  }
+})();
+</script>
+
+<!-- ── INTERCOM LIVE CHAT ── -->
+<script>
+  window.intercomSettings = { api_base: "https://api-iam.intercom.io", app_id: "ttlc7dyl" };
+</script>
+<script>
+  (function(){var w=window;var ic=w.Intercom;if(typeof ic==="function"){ic('reattach_activator');ic('update',w.intercomSettings);}else{var d=document;var i=function(){i.c(arguments);};i.q=[];i.c=function(args){i.q.push(args);};w.Intercom=i;var l=function(){var s=d.createElement('script');s.type='text/javascript';s.async=true;s.src='https://widget.intercom.io/widget/ttlc7dyl';var x=d.getElementsByTagName('script')[0];x.parentNode.insertBefore(s,x);};if(document.readyState==='complete'){l();}else if(w.attachEvent){w.attachEvent('onload',l);}else{w.addEventListener('load',l,false);}}})();
+</script>
+
+</body>
+</html>

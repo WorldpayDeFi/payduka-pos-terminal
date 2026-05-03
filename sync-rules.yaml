@@ -1,0 +1,14 @@
+# PayDuka Terminal — PowerSync Sync Rules
+# Paste this into your PowerSync dashboard → Sync Rules tab
+
+bucket_definitions:
+  # All terminals receive the full product catalogue
+  global_products:
+    data:
+      - SELECT id, name, sku, category, price, stock, low_stock_threshold, unit, image_url, created_at, updated_at FROM products
+
+  # Sales from the last 30 days
+  recent_sales:
+    data:
+      - SELECT id, total, payment_method, customer_name, pduka_earned, tx_hash, created_at FROM sales WHERE created_at >= now() - interval '30 days'
+      - SELECT id, sale_id, product_id, product_name, quantity, unit_price, subtotal FROM sale_items WHERE sale_id IN (SELECT id FROM sales WHERE created_at >= now() - interval '30 days')

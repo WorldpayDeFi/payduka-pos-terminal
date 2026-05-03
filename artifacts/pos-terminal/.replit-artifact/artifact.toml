@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/pos/"
+title = "PayDuka PoS Terminal"
+version = "1.0.0"
+id = "artifacts/pos-terminal"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/pos/" ]
+localPort = 23386
+
+[services.development]
+run = "pnpm --filter @workspace/pos-terminal run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/pos-terminal", "run", "build" ]
+publicDir = "artifacts/pos-terminal/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "23386"
+BASE_PATH = "/pos/"

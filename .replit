@@ -1,0 +1,32 @@
+modules = ["nodejs-24"]
+
+[[artifacts]]
+id = "artifacts/api-server"
+
+[[artifacts]]
+id = "artifacts/mockup-sandbox"
+
+[deployment]
+router = "application"
+deploymentTarget = "autoscale"
+
+[deployment.postBuild]
+args = ["pnpm", "store", "prune"]
+env = { "CI" = "true" }
+
+[workflows]
+runButton = "Project"
+
+[agent]
+stack = "PNPM_WORKSPACE"
+expertMode = true
+
+[postMerge]
+path = "scripts/post-merge.sh"
+timeoutMs = 20000
+
+[userenv]
+
+[userenv.shared]
+SUPABASE_DATABASE_URL = "postgresql://postgres:Gj3PVCJcwci1eS7P@db.noizdxauhpivpvfvyrqf.supabase.co:5432/postgres"
+VITE_POWERSYNC_URL = "https://69f5f8c5234fa2bf519f6089.powersync.journeyapps.com"

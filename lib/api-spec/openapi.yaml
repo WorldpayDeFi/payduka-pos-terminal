@@ -1,0 +1,736 @@
+openapi: 3.1.0
+info:
+  title: Api
+  version: 0.1.0
+  description: PayDuka PoS API
+servers:
+  - url: /api
+    description: Base API path
+tags:
+  - name: health
+    description: Health operations
+  - name: products
+    description: Product / inventory management
+  - name: sales
+    description: Sales transactions
+  - name: dashboard
+    description: Analytics and reporting
+  - name: openai
+    description: AI agent for business insights
+paths:
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags: [health]
+      summary: Health check
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+
+  # ── Products ──────────────────────────────────────────────────────────────
+  /products:
+    get:
+      operationId: listProducts
+      tags: [products]
+      summary: List all products
+      responses:
+        "200":
+          description: List of products
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Product"
+    post:
+      operationId: createProduct
+      tags: [products]
+      summary: Create a product
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateProductBody"
+      responses:
+        "201":
+          description: Created product
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+
+  /products/{id}:
+    get:
+      operationId: getProduct
+      tags: [products]
+      summary: Get a product by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Product
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    patch:
+      operationId: updateProduct
+      tags: [products]
+      summary: Update a product
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateProductBody"
+      responses:
+        "200":
+          description: Updated product
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    delete:
+      operationId: deleteProduct
+      tags: [products]
+      summary: Delete a product
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  # ── Sales ─────────────────────────────────────────────────────────────────
+  /sales:
+    get:
+      operationId: listSales
+      tags: [sales]
+      summary: List recent sales
+      parameters:
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of sales
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Sale"
+    post:
+      operationId: createSale
+      tags: [sales]
+      summary: Process a new sale (checkout)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateSaleBody"
+      responses:
+        "201":
+          description: Created sale
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SaleWithItems"
+
+  /sales/{id}:
+    get:
+      operationId: getSale
+      tags: [sales]
+      summary: Get a sale with its items
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Sale with items
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SaleWithItems"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  # ── Dashboard / Analytics ─────────────────────────────────────────────────
+  /dashboard/summary:
+    get:
+      operationId: getDashboardSummary
+      tags: [dashboard]
+      summary: Today's sales summary with day-over-day comparison
+      responses:
+        "200":
+          description: Dashboard summary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DashboardSummary"
+
+  /dashboard/daily-sales:
+    get:
+      operationId: getDailySales
+      tags: [dashboard]
+      summary: Sales totals for each day of the current month
+      responses:
+        "200":
+          description: Daily sales data
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/DailySalesPoint"
+
+  /dashboard/monthly-comparison:
+    get:
+      operationId: getMonthlyComparison
+      tags: [dashboard]
+      summary: Current month vs previous month comparison
+      responses:
+        "200":
+          description: Monthly comparison
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MonthlyComparison"
+
+  /dashboard/top-products:
+    get:
+      operationId: getTopProducts
+      tags: [dashboard]
+      summary: Best-selling products by revenue
+      responses:
+        "200":
+          description: Top products
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TopProduct"
+
+  /dashboard/stock-alerts:
+    get:
+      operationId: getStockAlerts
+      tags: [dashboard]
+      summary: Products with low or out-of-stock levels
+      responses:
+        "200":
+          description: Stock alerts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/StockAlert"
+
+  # ── OpenAI AI Agent ───────────────────────────────────────────────────────
+  /openai/conversations:
+    get:
+      operationId: listOpenaiConversations
+      tags: [openai]
+      summary: List AI conversations
+      responses:
+        "200":
+          description: List of conversations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/OpenaiConversation"
+    post:
+      operationId: createOpenaiConversation
+      tags: [openai]
+      summary: Start a new AI conversation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateOpenaiConversationBody"
+      responses:
+        "201":
+          description: Created conversation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OpenaiConversation"
+
+  /openai/conversations/{id}:
+    get:
+      operationId: getOpenaiConversation
+      tags: [openai]
+      summary: Get conversation with messages
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Conversation with messages
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OpenaiConversationWithMessages"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OpenaiError"
+    delete:
+      operationId: deleteOpenaiConversation
+      tags: [openai]
+      summary: Delete a conversation
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  /openai/conversations/{id}/messages:
+    get:
+      operationId: listOpenaiMessages
+      tags: [openai]
+      summary: List messages in a conversation
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Messages
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/OpenaiMessage"
+    post:
+      operationId: sendOpenaiMessage
+      tags: [openai]
+      summary: Send a message to the AI agent (SSE streaming)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SendOpenaiMessageBody"
+      responses:
+        "200":
+          description: SSE stream of assistant text chunks
+          content:
+            text/event-stream: {}
+
+components:
+  schemas:
+    HealthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+      required: [status]
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+      required: [error]
+
+    # ── Product schemas ──────────────────────────────────────────────────────
+    Product:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        sku:
+          type: string
+        category:
+          type: string
+        price:
+          type: number
+        stock:
+          type: integer
+        lowStockThreshold:
+          type: integer
+        unit:
+          type: string
+        imageUrl:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required: [id, name, sku, category, price, stock, lowStockThreshold, unit, createdAt, updatedAt]
+
+    CreateProductBody:
+      type: object
+      properties:
+        name:
+          type: string
+        sku:
+          type: string
+        category:
+          type: string
+        price:
+          type: number
+        stock:
+          type: integer
+        lowStockThreshold:
+          type: integer
+        unit:
+          type: string
+        imageUrl:
+          type: ["string", "null"]
+      required: [name, sku, category, price, stock, lowStockThreshold, unit]
+
+    UpdateProductBody:
+      type: object
+      properties:
+        name:
+          type: string
+        sku:
+          type: string
+        category:
+          type: string
+        price:
+          type: number
+        stock:
+          type: integer
+        lowStockThreshold:
+          type: integer
+        unit:
+          type: string
+        imageUrl:
+          type: ["string", "null"]
+
+    # ── Sale schemas ─────────────────────────────────────────────────────────
+    SaleItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        saleId:
+          type: integer
+        productId:
+          type: integer
+        productName:
+          type: string
+        quantity:
+          type: integer
+        unitPrice:
+          type: number
+        subtotal:
+          type: number
+      required: [id, saleId, productId, productName, quantity, unitPrice, subtotal]
+
+    Sale:
+      type: object
+      properties:
+        id:
+          type: integer
+        total:
+          type: number
+        paymentMethod:
+          type: string
+        customerName:
+          type: ["string", "null"]
+        pdukaEarned:
+          type: number
+        txHash:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+          format: date-time
+      required: [id, total, paymentMethod, pdukaEarned, createdAt]
+
+    SaleWithItems:
+      type: object
+      properties:
+        id:
+          type: integer
+        total:
+          type: number
+        paymentMethod:
+          type: string
+        customerName:
+          type: ["string", "null"]
+        pdukaEarned:
+          type: number
+        txHash:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+          format: date-time
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/SaleItem"
+      required: [id, total, paymentMethod, pdukaEarned, createdAt, items]
+
+    CreateSaleItemInput:
+      type: object
+      properties:
+        productId:
+          type: integer
+        quantity:
+          type: integer
+      required: [productId, quantity]
+
+    CreateSaleBody:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/CreateSaleItemInput"
+        paymentMethod:
+          type: string
+          enum: [cash, usdc, pol, pduka, card]
+        customerName:
+          type: ["string", "null"]
+        txHash:
+          type: ["string", "null"]
+      required: [items, paymentMethod]
+
+    # ── Dashboard schemas ────────────────────────────────────────────────────
+    DashboardSummary:
+      type: object
+      properties:
+        todayRevenue:
+          type: number
+        todaySalesCount:
+          type: integer
+        todayPdukaEarned:
+          type: number
+        yesterdayRevenue:
+          type: number
+        yesterdaySalesCount:
+          type: integer
+        revenueChangePercent:
+          type: number
+        salesCountChangePercent:
+          type: number
+        totalProducts:
+          type: integer
+        lowStockCount:
+          type: integer
+        outOfStockCount:
+          type: integer
+      required:
+        - todayRevenue
+        - todaySalesCount
+        - todayPdukaEarned
+        - yesterdayRevenue
+        - yesterdaySalesCount
+        - revenueChangePercent
+        - salesCountChangePercent
+        - totalProducts
+        - lowStockCount
+        - outOfStockCount
+
+    DailySalesPoint:
+      type: object
+      properties:
+        date:
+          type: string
+        revenue:
+          type: number
+        salesCount:
+          type: integer
+      required: [date, revenue, salesCount]
+
+    MonthlyComparison:
+      type: object
+      properties:
+        currentMonth:
+          type: string
+        currentRevenue:
+          type: number
+        currentSalesCount:
+          type: integer
+        previousMonth:
+          type: string
+        previousRevenue:
+          type: number
+        previousSalesCount:
+          type: integer
+        revenueChangePercent:
+          type: number
+        salesCountChangePercent:
+          type: number
+      required:
+        - currentMonth
+        - currentRevenue
+        - currentSalesCount
+        - previousMonth
+        - previousRevenue
+        - previousSalesCount
+        - revenueChangePercent
+        - salesCountChangePercent
+
+    TopProduct:
+      type: object
+      properties:
+        productId:
+          type: integer
+        name:
+          type: string
+        totalRevenue:
+          type: number
+        totalQuantity:
+          type: integer
+      required: [productId, name, totalRevenue, totalQuantity]
+
+    StockAlert:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        sku:
+          type: string
+        stock:
+          type: integer
+        lowStockThreshold:
+          type: integer
+        status:
+          type: string
+          enum: [low, out_of_stock]
+      required: [id, name, sku, stock, lowStockThreshold, status]
+
+    # ── OpenAI schemas ───────────────────────────────────────────────────────
+    OpenaiConversation:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+      required: [id, title, createdAt]
+
+    OpenaiMessage:
+      type: object
+      properties:
+        id:
+          type: integer
+        conversationId:
+          type: integer
+        role:
+          type: string
+        content:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+      required: [id, conversationId, role, content, createdAt]
+
+    CreateOpenaiConversationBody:
+      type: object
+      properties:
+        title:
+          type: string
+      required: [title]
+
+    SendOpenaiMessageBody:
+      type: object
+      properties:
+        content:
+          type: string
+      required: [content]
+
+    OpenaiConversationWithMessages:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        messages:
+          type: array
+          items:
+            $ref: "#/components/schemas/OpenaiMessage"
+      required: [id, title, createdAt, messages]
+
+    OpenaiError:
+      type: object
+      properties:
+        error:
+          type: string
+      required: [error]

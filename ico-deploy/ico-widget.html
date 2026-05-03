@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PDuka ICO — Buy Now</title>
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+
+<!-- Ethers.js v6 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.7.0/ethers.umd.min.js"></script>
+
+<style>
+  :root {
+    --navy:   #0B1437;
+    --navy2:  #0f1c4a;
+    --teal:   #00C4B4;
+    --teal2:  #00e5d3;
+    --gold:   #F5A623;
+    --gold2:  #ffc547;
+    --white:  #F0F4FF;
+    --muted:  #6B7DB3;
+    --card:   rgba(15,28,74,0.7);
+    --border: rgba(0,196,180,0.18);
+    --red:    #FF5C5C;
+    --green:  #2ECC71;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--navy);
+    font-family: 'DM Sans', sans-serif;
+    color: var(--white);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed; inset: 0; z-index: 0;
+    background:
+      radial-gradient(ellipse 60% 50% at 15% 20%, rgba(0,196,180,0.12) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 60% at 85% 75%, rgba(245,166,35,0.08) 0%, transparent 55%),
+      radial-gradient(ellipse 40% 40% at 50% 50%, rgba(11,20,55,0.9) 0%, transparent 100%);
+    pointer-events: none;
+  }
+
+  body::after {
+    content: '';
+    position: fixed; inset: 0; z-index: 0;
+    background-image:
+      linear-gradient(rgba(0,196,180,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,196,180,0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+  }
+
+  .wrap {
+    position: relative; z-index: 1;
+    max-width: 520px;
+    margin: 0 auto;
+    padding: 32px 16px 60px;
+  }
+
+  .header {
+    text-align: center;
+    margin-bottom: 32px;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  .logo-mark {
+    display: inline-flex; align-items: center; gap: 10px;
+    margin-bottom: 18px;
+  }
+
+  .hex {
+    width: 44px; height: 44px;
+    background: linear-gradient(135deg, var(--teal), var(--navy2));
+    clip-path: polygon(50% 0%,93% 25%,93% 75%,50% 100%,7% 75%,7% 25%);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800; font-size: 15px;
+    color: var(--white);
+    box-shadow: 0 0 20px rgba(0,196,180,0.4);
+  }
+
+  .brand-name {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800; font-size: 22px;
+    letter-spacing: 0.04em;
+    background: linear-gradient(90deg, var(--white) 40%, var(--teal));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+
+  .header h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(26px, 7vw, 36px);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    margin-bottom: 8px;
+  }
+
+  .header h1 span { color: var(--gold); }
+
+  .header p {
+    font-size: 14px; color: var(--muted);
+    font-weight: 300; letter-spacing: 0.02em;
+  }
+
+  .phase-badge {
+    display: inline-flex; align-items: center; gap: 7px;
+    background: rgba(245,166,35,0.12);
+    border: 1px solid rgba(245,166,35,0.3);
+    border-radius: 100px;
+    padding: 5px 14px;
+    font-size: 12px; font-weight: 500;
+    color: var(--gold2);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .phase-badge .dot {
+    width: 7px; height: 7px;
+    background: var(--gold);
+    border-radius: 50%;
+    animation: pulse 1.5s ease infinite;
+  }
+
+  .stats {
+    display: grid; grid-template-columns: repeat(3,1fr);
+    gap: 10px; margin-bottom: 20px;
+    animation: fadeUp 0.6s 0.1s ease both;
+  }
+
+  .stat {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 14px 10px;
+    text-align: center;
+    backdrop-filter: blur(12px);
+  }
+
+  .stat-val {
+    font-family: 'DM Mono', monospace;
+    font-size: clamp(13px, 3.5vw, 17px);
+    font-weight: 500;
+    color: var(--teal2);
+    margin-bottom: 4px;
+  }
+
+  .stat-label {
+    font-size: 10px; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.07em;
+  }
+
+  .progress-wrap {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px 20px;
+    margin-bottom: 20px;
+    backdrop-filter: blur(12px);
+    animation: fadeUp 0.6s 0.15s ease both;
+  }
+
+  .progress-header {
+    display: flex; justify-content: space-between;
+    font-size: 12px; color: var(--muted);
+    margin-bottom: 10px;
+  }
+
+  .progress-header strong { color: var(--white); }
+
+  .bar-bg {
+    background: rgba(255,255,255,0.07);
+    border-radius: 100px; height: 8px;
+    overflow: hidden;
+  }
+
+  .bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--teal), var(--gold));
+    border-radius: 100px;
+    width: 0%;
+    transition: width 1.2s cubic-bezier(0.4,0,0.2,1);
+    box-shadow: 0 0 10px rgba(0,196,180,0.5);
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 24px 20px;
+    backdrop-filter: blur(16px);
+    animation: fadeUp 0.6s 0.2s ease both;
+    margin-bottom: 16px;
+  }
+
+  .card-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 14px; font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 18px;
+  }
+
+  .tabs {
+    display: grid; grid-template-columns: 1fr 1fr;
+    background: rgba(255,255,255,0.05);
+    border-radius: 12px;
+    padding: 4px;
+    margin-bottom: 20px;
+    gap: 4px;
+  }
+
+  .tab {
+    padding: 10px;
+    border-radius: 9px;
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    font-family: 'Syne', sans-serif;
+    font-size: 13px; font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.04em;
+  }
+
+  .tab.active {
+    background: linear-gradient(135deg, var(--teal), #008f84);
+    color: var(--white);
+    box-shadow: 0 4px 15px rgba(0,196,180,0.3);
+  }
+
+  .input-group { margin-bottom: 16px; }
+
+  .input-label {
+    font-size: 12px; color: var(--muted);
+    margin-bottom: 7px; display: block;
+    letter-spacing: 0.04em;
+  }
+
+  .input-row {
+    display: flex; align-items: center;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+
+  .input-row:focus-within {
+    border-color: var(--teal);
+    box-shadow: 0 0 0 3px rgba(0,196,180,0.1);
+  }
+
+  .input-row input {
+    flex: 1; background: transparent;
+    border: none; outline: none;
+    padding: 13px 14px;
+    color: var(--white);
+    font-family: 'DM Mono', monospace;
+    font-size: 16px;
+  }
+
+  .input-row input::placeholder { color: rgba(255,255,255,0.2); }
+
+  .input-tag {
+    padding: 0 14px;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px; font-weight: 500;
+    color: var(--teal2);
+    background: rgba(0,196,180,0.08);
+    height: 100%; display: flex; align-items: center;
+    border-left: 1px solid var(--border);
+    white-space: nowrap;
+  }
+
+  .receive-box {
+    background: rgba(0,196,180,0.06);
+    border: 1px dashed rgba(0,196,180,0.25);
+    border-radius: 12px;
+    padding: 14px 16px;
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 20px;
+  }
+
+  .receive-label { font-size: 12px; color: var(--muted); }
+
+  .receive-amount {
+    font-family: 'DM Mono', monospace;
+    font-size: 18px; font-weight: 500;
+    color: var(--teal2);
+  }
+
+  .receive-sub { font-size: 11px; color: var(--muted); margin-top: 2px; text-align: right; }
+
+  .btn-buy {
+    width: 100%;
+    padding: 16px;
+    border: none; border-radius: 14px;
+    background: linear-gradient(135deg, var(--gold) 0%, #e8920f 100%);
+    color: var(--navy);
+    font-family: 'Syne', sans-serif;
+    font-size: 15px; font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 6px 24px rgba(245,166,35,0.35);
+    position: relative; overflow: hidden;
+  }
+
+  .btn-buy::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
+    opacity: 0; transition: opacity 0.2s;
+  }
+
+  .btn-buy:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(245,166,35,0.45); }
+  .btn-buy:hover::after { opacity: 1; }
+  .btn-buy:active { transform: translateY(0); }
+  .btn-buy:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+  .btn-connect {
+    width: 100%;
+    padding: 16px;
+    border: 1px solid var(--teal);
+    border-radius: 14px;
+    background: rgba(0,196,180,0.08);
+    color: var(--teal2);
+    font-family: 'Syne', sans-serif;
+    font-size: 15px; font-weight: 700;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+  }
+
+  .btn-connect:hover {
+    background: rgba(0,196,180,0.15);
+    box-shadow: 0 0 20px rgba(0,196,180,0.2);
+  }
+
+  .wallet-status {
+    display: flex; align-items: center; gap: 8px;
+    background: rgba(46,204,113,0.08);
+    border: 1px solid rgba(46,204,113,0.2);
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px; color: var(--green);
+    margin-bottom: 18px;
+  }
+
+  .wallet-status .dot { width: 7px; height: 7px; background: var(--green); border-radius: 50%; animation: pulse 2s ease infinite; }
+
+  .info-row {
+    display: flex; justify-content: space-between;
+    font-size: 12px; padding: 6px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+
+  .info-row:last-child { border-bottom: none; }
+  .info-row .k { color: var(--muted); }
+  .info-row .v { color: var(--white); font-family: 'DM Mono', monospace; font-size: 11px; }
+  .info-row .v.green { color: var(--green); }
+  .info-row .v.gold { color: var(--gold2); }
+
+  .toast {
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px);
+    background: var(--navy2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 20px;
+    font-size: 13px;
+    max-width: 320px; width: 90%;
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+    transition: transform 0.3s ease;
+    z-index: 100;
+  }
+
+  .toast.show { transform: translateX(-50%) translateY(0); }
+  .toast.success { border-color: rgba(46,204,113,0.4); color: var(--green); }
+  .toast.error { border-color: rgba(255,92,92,0.4); color: var(--red); }
+  .toast.info { border-color: rgba(0,196,180,0.4); color: var(--teal2); }
+
+  .contract-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 18px 20px;
+    backdrop-filter: blur(12px);
+    animation: fadeUp 0.6s 0.3s ease both;
+  }
+
+  .contract-addr {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px; color: var(--teal2);
+    word-break: break-all;
+    cursor: pointer;
+  }
+
+  .contract-addr:hover { color: var(--gold2); }
+
+  .footer {
+    text-align: center; margin-top: 28px;
+    font-size: 11px; color: var(--muted);
+    animation: fadeUp 0.6s 0.4s ease both;
+  }
+
+  .footer a { color: var(--teal2); text-decoration: none; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes pulse {
+    0%,100% { opacity: 1; }
+    50%      { opacity: 0.4; }
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .spinner {
+    width: 18px; height: 18px;
+    border: 2px solid rgba(11,20,55,0.4);
+    border-top-color: var(--navy);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    display: inline-block;
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="logo-mark">
+      <div class="hex">PD</div>
+      <span class="brand-name">PayDuka</span>
+    </div>
+    <div class="phase-badge"><span class="dot"></span> Seed Round — Live Now</div>
+    <h1>Buy <span>PDuka</span> Tokens</h1>
+    <p>Seed price · $0.005 per PDUKA · Polygon Mainnet</p>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-val" id="stat-price">$0.005</div>
+      <div class="stat-label">Token Price</div>
+    </div>
+    <div class="stat">
+      <div class="stat-val" id="stat-available">1B</div>
+      <div class="stat-label">Available</div>
+    </div>
+    <div class="stat">
+      <div class="stat-val" id="stat-sold">0</div>
+      <div class="stat-label">Tokens Sold</div>
+    </div>
+  </div>
+
+  <!-- Progress -->
+  <div class="progress-wrap">
+    <div class="progress-header">
+      <span>Seed Round Progress</span>
+      <span><strong id="pct-text">0%</strong> of 1B PDuka sold</span>
+    </div>
+    <div class="bar-bg">
+      <div class="bar-fill" id="progress-bar"></div>
+    </div>
+  </div>
+
+  <!-- Main Buy Card -->
+  <div class="card">
+    <div class="card-title">Purchase</div>
+
+    <!-- Wallet not connected -->
+    <div id="section-connect">
+      <button class="btn-connect" onclick="connectWallet()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+        Connect Wallet
+      </button>
+      <p style="text-align:center;font-size:11px;color:var(--muted);margin-top:12px;">MetaMask or any WalletConnect wallet · Polygon Mainnet required</p>
+    </div>
+
+    <!-- Wallet connected -->
+    <div id="section-buy" style="display:none">
+
+      <div class="wallet-status">
+        <span class="dot"></span>
+        <span id="wallet-addr">Connected</span>
+      </div>
+
+      <!-- Currency Tabs -->
+      <div class="tabs">
+        <button class="tab active" id="tab-usdc" onclick="switchTab('usdc')">USDC</button>
+        <button class="tab" id="tab-pol" onclick="switchTab('pol')">POL</button>
+      </div>
+
+      <!-- Amount Input -->
+      <div class="input-group">
+        <label class="input-label">You Pay</label>
+        <div class="input-row">
+          <input type="number" id="pay-amount" placeholder="0.00" min="0" step="any" oninput="calcTokens()" />
+          <span class="input-tag" id="pay-tag">USDC</span>
+        </div>
+      </div>
+
+      <!-- You Receive -->
+      <div class="receive-box">
+        <div>
+          <div class="receive-label">You Receive</div>
+        </div>
+        <div>
+          <div class="receive-amount" id="recv-amount">0 PDUKA</div>
+          <div class="receive-sub" id="recv-usd">≈ $0.00</div>
+        </div>
+      </div>
+
+      <button class="btn-buy" id="btn-buy" onclick="buyTokens()">
+        Buy PDuka Tokens
+      </button>
+
+      <div style="margin-top:14px;">
+        <div class="info-row">
+          <span class="k">Price per PDUKA</span>
+          <span class="v gold">$0.005</span>
+        </div>
+        <div class="info-row">
+          <span class="k">Network</span>
+          <span class="v green">Polygon Mainnet ✓</span>
+        </div>
+        <div class="info-row">
+          <span class="k">Min Purchase</span>
+          <span class="v">$1 USDC / 1 POL</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contract Info -->
+  <div class="contract-card">
+    <div class="card-title" style="margin-bottom:12px">Contract Details</div>
+    <div class="info-row">
+      <span class="k">ICO Contract</span>
+      <span class="v contract-addr" onclick="copyAddr('0xD8358ba36723b860FFC8E9830060a8Cf348B84d3')" title="Click to copy">0xD8358b...84d3</span>
+    </div>
+    <div class="info-row">
+      <span class="k">PDuka Token</span>
+      <span class="v contract-addr" onclick="copyAddr('0x5025053F6Dec8C8Cfa85AE24C0CB9e4935C98E54')" title="Click to copy">0x50250...E54</span>
+    </div>
+    <div class="info-row">
+      <span class="k">Blockchain</span>
+      <span class="v green">Polygon (MATIC/POL)</span>
+    </div>
+    <div class="info-row">
+      <span class="k">Payment Methods</span>
+      <span class="v">USDC &amp; POL</span>
+    </div>
+    <div class="info-row">
+      <span class="k">Price Feed</span>
+      <span class="v">Chainlink Live Oracle</span>
+    </div>
+    <div style="margin-top:14px;text-align:center;">
+      <a href="https://polygonscan.com/address/0xD8358ba36723b860FFC8E9830060a8Cf348B84d3" target="_blank"
+         style="font-size:11px;color:var(--teal2);text-decoration:none;">
+        View on Polygonscan ↗
+      </a>
+    </div>
+  </div>
+
+  <div class="footer">
+    <p>© 2025 PayDuka Ltd · <a href="https://payduka.xyz">payduka.xyz</a> · Built on Polygon</p>
+    <p style="margin-top:6px;">Not financial advice. Participate at your own risk.</p>
+  </div>
+
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ─── CONFIG ───────────────────────────────────────────────────────────────────
+const CONFIG = {
+  ICO_CONTRACT:     "0xD8358ba36723b860FFC8E9830060a8Cf348B84d3",
+  PDUKA_TOKEN:      "0x5025053F6Dec8C8Cfa85AE24C0CB9e4935C98E54",
+  // FIX: Native USDC on Polygon (not bridged USDC.e)
+  USDC_CONTRACT:    "0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359",
+  POLYGON_CHAIN_ID: 137,
+  SEED_PRICE_USD:   0.005,
+  ICO_ALLOCATION:   1_000_000_000,
+};
+
+// FIX: ABI matches the actual deployed contract functions
+const ICO_ABI = [
+  "function buyWithUSDC(uint256 usdcAmount) external",
+  "function buyWithPOL() external payable",
+  "function totalSold() external view returns (uint256)",
+  "function remainingAllocation() external view returns (uint256)",
+  "function icoBalance() external view returns (uint256)",
+  "function icoActive() external view returns (bool)",
+];
+
+const ERC20_ABI = [
+  "function approve(address spender, uint256 amount) external returns (bool)",
+  "function allowance(address owner, address spender) external view returns (uint256)",
+  "function balanceOf(address account) external view returns (uint256)",
+];
+
+// ─── STATE ────────────────────────────────────────────────────────────────────
+let provider, signer, walletAddress;
+let activeTab = 'usdc';
+let polPriceUSD = 0.6; // fallback; fetched live on load
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+window.addEventListener('load', async () => {
+  await fetchPolPrice();
+  await loadICOStats();
+
+  setTimeout(() => {
+    const bar = document.getElementById('progress-bar');
+    const pct = parseFloat(bar.dataset.pct || 0);
+    bar.style.width = pct + '%';
+  }, 300);
+
+  // Auto-reconnect if wallet was previously connected
+  if (window.ethereum?.selectedAddress) {
+    await connectWallet(true);
+  }
+});
+
+async function fetchPolPrice() {
+  try {
+    const r = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=matic-network&vs_currencies=usd');
+    const d = await r.json();
+    polPriceUSD = d['matic-network']?.usd || 0.6;
+  } catch { /* use fallback */ }
+}
+
+async function loadICOStats() {
+  try {
+    const rpc = new ethers.JsonRpcProvider('https://polygon-bor-rpc.publicnode.com');
+    const ico = new ethers.Contract(CONFIG.ICO_CONTRACT, ICO_ABI, rpc);
+
+    const [sold, remaining] = await Promise.all([
+      ico.totalSold().catch(() => 0n),
+      ico.remainingAllocation().catch(() => BigInt(CONFIG.ICO_ALLOCATION) * 10n**18n),
+    ]);
+
+    const soldTokens      = Number(sold) / 1e18;
+    const remainingTokens = Number(remaining) / 1e18;
+    const pct = Math.min((soldTokens / CONFIG.ICO_ALLOCATION) * 100, 100);
+
+    document.getElementById('stat-available').textContent = fmtCompact(remainingTokens);
+    document.getElementById('stat-sold').textContent      = fmtCompact(soldTokens);
+    document.getElementById('pct-text').textContent       = pct.toFixed(2) + '%';
+
+    const bar = document.getElementById('progress-bar');
+    bar.dataset.pct = pct;
+  } catch (e) {
+    console.warn('Stats fetch failed:', e);
+  }
+}
+
+// ─── WALLET ───────────────────────────────────────────────────────────────────
+async function connectWallet(silent = false) {
+  if (!window.ethereum) {
+    if (!silent) showToast('No wallet found. Install MetaMask or use a Web3 browser.', 'error');
+    return;
+  }
+  try {
+    provider = new ethers.BrowserProvider(window.ethereum);
+    await provider.send('eth_requestAccounts', []);
+
+    const network = await provider.getNetwork();
+    if (Number(network.chainId) !== CONFIG.POLYGON_CHAIN_ID) {
+      await switchToPolygon();
+    }
+
+    signer        = await provider.getSigner();
+    walletAddress = await signer.getAddress();
+
+    document.getElementById('section-connect').style.display = 'none';
+    document.getElementById('section-buy').style.display     = 'block';
+    document.getElementById('wallet-addr').textContent =
+      walletAddress.slice(0, 6) + '...' + walletAddress.slice(-4) + ' ✓';
+
+    if (!silent) showToast('Wallet connected!', 'success');
+  } catch (e) {
+    if (!silent) showToast('Connection failed: ' + (e.message || 'Unknown error'), 'error');
+  }
+}
+
+async function switchToPolygon() {
+  try {
+    await window.ethereum.request({
+      method: 'wallet_switchEthereumChain',
+      params: [{ chainId: '0x89' }],
+    });
+  } catch (e) {
+    if (e.code === 4902) {
+      await window.ethereum.request({
+        method: 'wallet_addEthereumChain',
+        params: [{
+          chainId: '0x89',
+          chainName: 'Polygon Mainnet',
+          rpcUrls: ['https://polygon-rpc.com'],
+          nativeCurrency: { name: 'POL', symbol: 'POL', decimals: 18 },
+          blockExplorerUrls: ['https://polygonscan.com'],
+        }],
+      });
+    }
+  }
+}
+
+// ─── TABS ─────────────────────────────────────────────────────────────────────
+function switchTab(tab) {
+  activeTab = tab;
+  document.getElementById('tab-usdc').classList.toggle('active', tab === 'usdc');
+  document.getElementById('tab-pol').classList.toggle('active', tab === 'pol');
+  document.getElementById('pay-tag').textContent = tab.toUpperCase();
+  document.getElementById('pay-amount').value = '';
+  document.getElementById('recv-amount').textContent = '0 PDUKA';
+  document.getElementById('recv-usd').textContent    = '≈ $0.00';
+}
+
+// ─── CALC ─────────────────────────────────────────────────────────────────────
+function calcTokens() {
+  const amount   = parseFloat(document.getElementById('pay-amount').value) || 0;
+  const usdValue = activeTab === 'usdc' ? amount : amount * polPriceUSD;
+  const tokens   = usdValue / CONFIG.SEED_PRICE_USD;
+  document.getElementById('recv-amount').textContent = fmtNum(tokens) + ' PDUKA';
+  document.getElementById('recv-usd').textContent    = '≈ $' + usdValue.toFixed(2);
+}
+
+// ─── BUY ──────────────────────────────────────────────────────────────────────
+async function buyTokens() {
+  const amount = parseFloat(document.getElementById('pay-amount').value);
+  if (!amount || amount <= 0) { showToast('Enter a valid amount.', 'error'); return; }
+
+  const btn = document.getElementById('btn-buy');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span>';
+
+  try {
+    const ico = new ethers.Contract(CONFIG.ICO_CONTRACT, ICO_ABI, signer);
+
+    if (activeTab === 'usdc') {
+      const usdc      = new ethers.Contract(CONFIG.USDC_CONTRACT, ERC20_ABI, signer);
+      const amountWei = ethers.parseUnits(amount.toString(), 6);
+
+      showToast('Approving USDC...', 'info');
+      const allowance = await usdc.allowance(walletAddress, CONFIG.ICO_CONTRACT);
+      if (allowance < amountWei) {
+        const approveTx = await usdc.approve(CONFIG.ICO_CONTRACT, amountWei);
+        await approveTx.wait();
+      }
+
+      showToast('Sending transaction...', 'info');
+      const tx = await ico.buyWithUSDC(amountWei);
+      await tx.wait();
+
+    } else {
+      const amountWei = ethers.parseEther(amount.toString());
+      showToast('Sending transaction...', 'info');
+      const tx = await ico.buyWithPOL({ value: amountWei });
+      await tx.wait();
+    }
+
+    showToast('Purchase successful! PDuka tokens are in your wallet.', 'success');
+    document.getElementById('pay-amount').value = '';
+    calcTokens();
+    await loadICOStats();
+
+  } catch (e) {
+    const msg = e?.reason || e?.message || 'Transaction failed';
+    showToast('Error: ' + msg.slice(0, 80), 'error');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = 'Buy PDuka Tokens';
+  }
+}
+
+// ─── UTILS ────────────────────────────────────────────────────────────────────
+function fmtNum(n) {
+  if (n >= 1_000_000) return (n / 1_000_000).toFixed(2) + 'M';
+  if (n >= 1_000)     return (n / 1_000).toFixed(1) + 'K';
+  return n.toFixed(2);
+}
+
+function fmtCompact(n) {
+  if (n >= 1_000_000_000) return (n / 1_000_000_000).toFixed(2) + 'B';
+  if (n >= 1_000_000)     return (n / 1_000_000).toFixed(1) + 'M';
+  return n.toFixed(0);
+}
+
+// FIX: copyAddr now receives and copies the full address
+function copyAddr(fullAddr) {
+  navigator.clipboard.writeText(fullAddr).then(() => showToast('Address copied!', 'info'));
+}
+
+let toastTimer;
+function showToast(msg, type = 'info') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast ' + type + ' show';
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 4000);
+}
+</script>
+
+</body>
+</html>
