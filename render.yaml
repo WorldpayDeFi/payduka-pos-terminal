@@ -1,0 +1,24 @@
+# Exported from Render on 2026-09-30T18:41:15Z
+version: "1"
+projects:
+- name: My project
+  environments:
+  - name: Production
+    services:
+    - type: web
+      name: payduka-pos-terminal
+      runtime: node
+      repo: https://github.com/WorldpayDeFi/payduka-pos-terminal
+      plan: free
+      region: oregon
+      buildCommand: cd node-project && npm install
+      startCommand: cd node-project && node index.js
+      autoDeployTrigger: commit
+    - type: web
+      name: payduka-pos-terminal-1
+      runtime: static
+      repo: https://github.com/WorldpayDeFi/payduka-pos-terminal
+      buildCommand: pnpm install --no-frozen-lockfile && pnpm --filter @workspace/pos-terminal
+        run build
+      staticPublishPath: artifacts/pos-terminal/dist/public
+      autoDeployTrigger: commit
