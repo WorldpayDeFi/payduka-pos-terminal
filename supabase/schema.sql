@@ -188,3 +188,44 @@ INSERT INTO sale_items (id,sale_id,product_id,product_name,quantity,unit_price,s
 (103,37,7,'Eggs (30 pack)',2,3.50,7.00),(104,37,5,'Milk 500ml',4,0.75,3.00),(105,37,6,'Bread Loaf',3,1.10,3.30);
 
 SELECT setval('sale_items_id_seq', 105);
+-- ── Cashiers & Sessions (Phase 1 Security) ──────────────────────────────────
+
+CREATE TABLE IF NOT EXISTS cashiers (
+  id            TEXT PRIMARY KEY,                    -- e.g. 'c1', 'c2'
+  name          TEXT NOT NULL,
+  role          TEXT NOT NULL CHECK (role IN ('Manager', 'Cashier')),
+  pin_hash      TEXT NOT NULL,                       -- PBKDF2: salt$iterations$hash
+  color         TEXT NOT NULL DEFAULT '#00c9b1',
+  is_active     BOOLEAN NOT NULL DEFAULT true,
+  created_at    TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at    TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS cashier_sessions (
+  id            TEXT PRIMARY KEY,                    -- e.g. 'sess_a1b2c3d4'
+  cashier_id    TEXT NOT NULL REFERENCES cashiers(id),
+  device_id     TEXT,                                -- for device binding later
+  logged_in_at  TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  logged_out_at TIMESTAMPTZ,
+  is_active     BOOLEAN NOT NULL DEFAULT true
+);
+
+-- PowerSync publication (add to existing if needed)
+ALTER PUBLICATION powersync ADD TABLE cashiers, cashier_sessions;
+
+-- RLS
+ALTER TABLE cashiers           ENABLE ROW LEVEL SECURITY;
+ALTER TABLE cashier_sessions   ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "terminal_access" ON cashiers         FOR ALL TO authenticated USING (true) WITH CHECK (true);
+CREATE POLICY "terminal_access" ON cashier_sessions FOR ALL TO authenticated USING (true) WITH CHECK (true);
+CREATE POLICY "anon_access"     ON cashiers         FOR SELECT TO anon USING (true);  -- only read for login
+CREATE POLICY "anon_access"     ON cashier_sessions FOR ALL TO anon USING (true) WITH CHECK (true);
+
+-- Seed demo cashiers (PIN hashes for 1234 / 5678 / 9999)
+-- These are PBKDF2-SHA256, 100k iterations. Never store plain PINs.
+INSERT INTO cashiers (id, name, role, pin_hash, color) VALUES
+('c1', 'Thabo',  'Manager', 'GBFXEpqdqDV+MwWVNjrKxQ==$100000$g54Buavr5rNBvewYTM/PQT8dXi12G3E+5obhqWEtWEs=', '#00c9b1'),
+('c2', 'Nomsa',  'Cashier', '3GlrcnY4z3loX1d/Tky8uQ==$100000$HIbgjfzxLdXiTeVSRAgqt5vRiEmtqN0LVtHCCNUxYNg=', '#f4c430'),
+('c3', 'Sipho',  'Cashier', 'cj2MEnAsm5TulsDs+aGjRA==$100000$t3N7Huw43VYcF8v6kZ9tFXXrCaU1jj7XmS95dbh+zXg=', '#8b5cf6')
+ON CONFLICT (id) DO NOTHING;
