@@ -32,9 +32,15 @@ function PowerSyncInit() {
   return null;
 }
 
-function Router() {
+function Router({
+  cashier,
+  onLogout,
+}: {
+  cashier: Cashier;
+  onLogout: () => void;
+}) {
   return (
-    <Layout>
+    <Layout cashier={cashier} onLogout={onLogout}>
       <Switch>
         <Route path="/" component={Checkout} />
         <Route path="/dashboard" component={Dashboard} />
@@ -66,7 +72,7 @@ function App() {
       <TooltipProvider>
         <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
           <PowerSyncInit />
-          <Router />
+          <Router cashier={cashier} onLogout={() => setCashier(null)} />
         </WouterRouter>
         <Toaster />
       </TooltipProvider>
