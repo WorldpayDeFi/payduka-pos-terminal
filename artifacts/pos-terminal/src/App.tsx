@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Switch, Route, Router as WouterRouter } from "wouter";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
@@ -11,8 +11,17 @@ import Dashboard from "@/pages/dashboard";
 import Inventory from "@/pages/inventory";
 import Sales from "@/pages/sales";
 import AI from "@/pages/ai";
+import LoginPage from "@/pages/login";
 
 const queryClient = new QueryClient();
+
+type Cashier = {
+  id: string;
+  name: string;
+  role: string;
+  pin_hash: string;
+  color: string;
+};
 
 function PowerSyncInit() {
   useEffect(() => {
@@ -39,6 +48,19 @@ function Router() {
 }
 
 function App() {
+  const [cashier, setCashier] = useState<Cashier | null>(null);
+
+  if (!cashier) {
+    return (
+      <QueryClientProvider client={queryClient}>
+        <TooltipProvider>
+          <LoginPage onLogin={(c) => setCashier(c)} />
+          <Toaster />
+        </TooltipProvider>
+      </QueryClientProvider>
+    );
+  }
+
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
