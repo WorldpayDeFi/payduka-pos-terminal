@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite --config vite.config.ts --host 0.0.0.0",
+    "dev": "vite --config vite.config.ts --host 0.0.0.0 --port ${PORT:-5173} --strictPort",
     "build": "vite build --config vite.config.ts",
     "serve": "vite preview --config vite.config.ts --host 0.0.0.0",
     "typecheck": "tsc -p tsconfig.json --noEmit"
@@ -71,6 +71,7 @@
     "zod": "catalog:"
   },
   "dependencies": {
+    "@workspace/api-client-react": "workspace:*",
     "@journeyapps/wa-sqlite": "^1.7.0",
     "@powersync/react": "^1.10.0",
     "@powersync/web": "^1.37.2",
